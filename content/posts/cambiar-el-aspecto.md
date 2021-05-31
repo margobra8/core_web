@@ -61,7 +61,7 @@ Para eso tenemos que editar el HTML que ahora mismo se renderiza como vistas a t
     </div>
     <h1><span class="no-narrow">The</span> Quiz <span class="no-narrow">Site</span></h1>
     <!-- aquí insertamos la imagen que nos piden -->
-    <img src="http//example.com/headerlogo.png" />
+    <img src="http://example.com/headerlogo.png" />
 </header>
 [...]
 {{</code>}}
