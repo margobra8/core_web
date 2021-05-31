@@ -9,8 +9,8 @@ Acceso a cada página permitido sólo un número X de veces Este problema lo pod
 &lt;h4 id="un-contador-para-cada-página">Un contador para cada página&lt;/h4>
 &lt;p>Crearemos un controlador en &lt;code>controllers/session.js&lt;/code> que se encargue de verificar el acceso y contabilizar los accesos nuevos.&lt;/p>
 &lt;div class="collapsable-code">
-&lt;input id="826314975" type="checkbox" />
-&lt;label for="826314975">
+&lt;input id="387296415" type="checkbox" />
+&lt;label for="387296415">
 &lt;span class="collapsable-code__language">js&lt;/span>
 &lt;span class="collapsable-code__title">controllers/session.js&lt;/span>
 &lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
@@ -25,6 +25,7 @@ const url = req.url;
 req.session.visits = req.session.visits || {};
 // almacenamos un nuevo valor de visita para cada ruta o creamos la primera visita a esa página
 req.session.visits[url] = req.session.visits[url] || 1;
+req.session.visits[url]&amp;#43;&amp;#43;;
 // comprobamos que no se excede el número de visitas permitidas para esa página, en ese caso continuamos al siguiente mw, si no, mostramos mensaje y volvemos al home
 if (req.session.visits[url] &amp;lt;= VISIT_LIMIT) {
 next();
@@ -37,8 +38,8 @@ res.redirect(&amp;#34;/&amp;#34;);
 &lt;/div>
 &lt;p>Ahora sólo tenemos que incluir este middleware &lt;strong>antes&lt;/strong> del resto de middlewares para las rutas en las que las queramos aplicar, por ejemplo:&lt;/p>
 &lt;div class="collapsable-code">
-&lt;input id="953218476" type="checkbox" />
-&lt;label for="953218476">
+&lt;input id="362785941" type="checkbox" />
+&lt;label for="362785941">
 &lt;span class="collapsable-code__language">js&lt;/span>
 &lt;span class="collapsable-code__title">routes/index.js&lt;/span>
 &lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
@@ -50,8 +51,8 @@ router.get(&amp;#34;/groups&amp;#34;, sessionController.visitLimitPerPage, group
 &lt;h4 id="un-contador-para-todas-las-páginas">Un contador para todas las páginas&lt;/h4>
 &lt;p>Modificando un poco el middleware anterior se puede conseguir lo mismo pero con un contador común en &lt;code>session&lt;/code>:&lt;/p>
 &lt;div class="collapsable-code">
-&lt;input id="697412583" type="checkbox" />
-&lt;label for="697412583">
+&lt;input id="374286915" type="checkbox" />
+&lt;label for="374286915">
 &lt;span class="collapsable-code__language">js&lt;/span>
 &lt;span class="collapsable-code__title">controllers/session.js&lt;/span>
 &lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
@@ -62,6 +63,7 @@ exports.visitLimitGeneral = (req, res, next) =&amp;gt; {
 const VISIT_LIMIT = 10;
 // creamos el objeto req.session.visits donde almacenaremos un objeto con las visitas totales o cogemos el objeto ya presente
 req.session.visits = req.session.visits || 1;
+req.session.visits&amp;#43;&amp;#43;;
 // comprobamos que no se excede el número de visitas permitidas para esa página, en ese caso continuamos al siguiente mw, si no, mostramos mensaje y volvemos al home
 if (req.session.visits &amp;lt;= VISIT_LIMIT) {
 next();
@@ -79,8 +81,8 @@ Implementación de la ruta Para implementar esta funcionalidad vamos a hacer que
 &lt;p>Para implementar esta funcionalidad vamos a hacer que el usuario pueda visualizar la puntuación de los grupos en una nueva página. Para ello implementaremos una primitiva HTTP &lt;code>GET /scores/&lt;/code> en la que se visualizará una tabla con todas las puntuaciones de todos los grupos. Para gestionar el tema de las puntuaciones crearemos un controlador que se encarge de gestionar todas las primitivas relacionadas con las puntuaciones.&lt;/p>
 &lt;p>De momento supondremos que este controller lo llamaremos &lt;code>scoreController&lt;/code>. Vamos a editar el documento de rutas para incluir la nueva ruta.&lt;/p>
 &lt;div class="collapsable-code">
-&lt;input id="458631729" type="checkbox" />
-&lt;label for="458631729">
+&lt;input id="982154673" type="checkbox" />
+&lt;label for="982154673">
 &lt;span class="collapsable-code__language">js&lt;/span>
 &lt;span class="collapsable-code__title">routes/index.js&lt;/span>
 &lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
@@ -103,8 +105,8 @@ router.get(&amp;#34;/scores&amp;#34;, scoreController.index);
 &lt;h1 id="modificación-del-modelo">Modificación del modelo&lt;/h1>
 &lt;p>Para acomodar las puntuaciones por grupo tenemos que modificar el modelo de &lt;code>Group&lt;/code> añadiendo un campo de puntuación, eso lo haremos en el archivo del modelo correspondiente:&lt;/p>
 &lt;div class="collapsable-code">
-&lt;input id="243685197" type="checkbox" />
-&lt;label for="243685197">
+&lt;input id="439562718" type="checkbox" />
+&lt;label for="439562718">
 &lt;span class="collapsable-code__language">js&lt;/span>
 &lt;span class="collapsable-code__title">models/group.js&lt;/span>
 &lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
@@ -139,8 +141,8 @@ return Group;
 &lt;h2 id="creación-del-controlador">Creación del controlador&lt;/h2>
 &lt;p>Crearemos un nuevo archivo &lt;code>controllers/score.js&lt;/code> para este fin e implementaremos el método index.&lt;/p>
 &lt;div class="collapsable-code">
-&lt;input id="367214589" type="checkbox" />
-&lt;label for="367214589">
+&lt;input id="569247831" type="checkbox" />
+&lt;label for="569247831">
 &lt;span class="collapsable-code__language">js&lt;/span>
 &lt;span class="collapsable-code__title">controllers/score.js&lt;/span>
 &lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
@@ -167,8 +169,8 @@ next(error);
 &lt;h2 id="implementación-de-la-vista">Implementación de la vista&lt;/h2>
 &lt;p>Crearemos una nueva vista para ello: &lt;code>views/scores/index.ejs&lt;/code> basándonos en el index de la vista de groups ya hecha.&lt;/p>
 &lt;div class="collapsable-code">
-&lt;input id="825396471" type="checkbox" />
-&lt;label for="825396471">
+&lt;input id="953246781" type="checkbox" />
+&lt;label for="953246781">
 &lt;span class="collapsable-code__language">html&lt;/span>
 &lt;span class="collapsable-code__title">views/scores/index.ejs&lt;/span>
 &lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
@@ -192,8 +194,8 @@ next(error);
 &lt;h2 id="modificación-de-groupcheck">Modificación de &lt;code>groupCheck&lt;/code>&lt;/h2>
 &lt;p>Para ir sumando las puntuaciones, modificaremos el controlador de groupCheck. En mi caso lo he llamado randomCheck pero es distinto al de los quizzes individuales porque está en el archivo &lt;code>controllers/group.js&lt;/code>.&lt;/p>
 &lt;div class="collapsable-code">
-&lt;input id="923417568" type="checkbox" />
-&lt;label for="923417568">
+&lt;input id="819654327" type="checkbox" />
+&lt;label for="819654327">
 &lt;span class="collapsable-code__language">js&lt;/span>
 &lt;span class="collapsable-code__title">controllers/group.js&lt;/span>
 &lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
@@ -254,8 +256,8 @@ next(error);
 &lt;h2 id="adición-del-enlace">Adición del enlace&lt;/h2>
 &lt;p>Ahora sólo nos falta añadir el enlace en el menú de navegación.&lt;/p>
 &lt;div class="collapsable-code">
-&lt;input id="628735194" type="checkbox" />
-&lt;label for="628735194">
+&lt;input id="594183762" type="checkbox" />
+&lt;label for="594183762">
 &lt;span class="collapsable-code__language">html&lt;/span>
 &lt;span class="collapsable-code__title">views/scores/index.ejs&lt;/span>
 &lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
