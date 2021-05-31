@@ -79,7 +79,7 @@ Ahora podemos almacenar en la BBDD la puntuación de cada grupo. Para ello modif
 
 Crearemos un nuevo archivo `controllers/score.js` para este fin e implementaremos el método index.
 
-{{< code language="js" title="routes/index.js" expand="Show" collapse="Hide" isCollapsed="false" >}}
+{{< code language="js" title="controllers/score.js" expand="Show" collapse="Hide" isCollapsed="false" >}}
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 const { models } = require("../models")
@@ -97,7 +97,7 @@ exports.index = async (req, res, next) => {
     next(error);
   }
 };
-{{ </code>}}
+{{</code>}}
 
 Se puede ver cómo el código es casi igual al index de groups, y esto es pq al final estamos obteniendo en un array los grupos que hay y sus atributos, entre ellos nombre y puntuación. La diferencia es en el `res.render(...)` que ahora llamamos a la nueva vista que crearemos.
 
