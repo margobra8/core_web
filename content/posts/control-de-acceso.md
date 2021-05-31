@@ -116,7 +116,11 @@ Como siempre añadiríamos este middleware a las rutas que lo precisaran.
 
 ## Acceso a las páginas permitido a ciertos usuarios durante ciertas horas
 
-Ahora trataremos el caso en el que queremos que los accesos estén restringidos a ciertos usuarios durante ciertas horas del día. Aquí expongo 3 middlewares que realizan funcionalidades distintas según lo que queremos conseguir: acceso restringido a un rango de horas para cualquier usuario, acceso restringido un rango de horas para admins y el resto de tiempo para todos los usuarios, acceso restringido sólo a admins durante una franja horaria determinada y cerrado para todos el resto del tiempo (con cascada de middlewares).
+Ahora trataremos el caso en el que queremos que los accesos estén restringidos a ciertos usuarios durante ciertas horas del día. Aquí expongo 3 middlewares que realizan funcionalidades distintas según lo que queremos conseguir:
+
+- acceso restringido a un rango de horas para cualquier usuario
+- acceso restringido un rango de horas para admins y el resto de tiempo para todos los usuarios
+- acceso restringido sólo a admins durante una franja horaria determinada y cerrado para todos el resto del tiempo (con cascada de middlewares).
 
 ### Acceso restringido durante un rango de horas/fecha para cualquier usuario
 
