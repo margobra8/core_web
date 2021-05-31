@@ -1,0 +1,75 @@
+baseurl = "/"
+languageCode = "es"
+defaultContentLanguage = "es"
+theme = "terminal"
+paginate = 5
+
+[params]
+  # dir name of your main content (default is `content/posts`).
+  # the list of set content will show up on your index page (baseurl).
+  #contentTypeName = ""
+
+  # ["orange", "blue", "red", "green", "pink"]
+  themeColor = "green"
+
+  # if you set this to 0, only submenu trigger will be visible
+  showMenuItems = 2
+
+  # show selector to switch language
+  showLanguageSelector = false
+
+  # set theme to full screen width
+  fullWidthTheme = false
+
+  # center theme with default width
+  centerTheme = false
+
+  # set a custom favicon (default is a `themeColor` square)
+  # favicon = "favicon.ico"
+
+  # set post to show the last updated
+  # If you use git, you can set `enableGitInfo` to `true` and then post will automatically get the last updated
+  showLastUpdated = false
+  # Provide a string as a prefix for the last update date. By default, it looks like this: 2020-xx-xx [Updated: 2020-xx-xx] :: Author
+  # updatedDatePrefix = "Updated"
+
+  # set all headings to their default size (depending on browser settings)
+  # it's set to `true` by default
+  # oneHeadingSize = false
+
+[params.twitter]
+  # set Twitter handles for Twitter cards
+  # see https://developer.twitter.com/en/docs/tweets/optimize-with-cards/guides/getting-started#card-and-content-attribution
+  # do not include @
+  creator = "usualmarcos"
+  site = "https://core.marquitos.space/"
+
+[languages]
+  [languages.es]
+    languageName = "Español"
+    title = "CORE Study Hub"
+    subtitle = "Código y explicaciones para el 2º parcial de la asignatura CORE de la ETSIT-UPM"
+    owner = "Marcos Gómez"
+    keywords = "core, etsit, parcial, exámenes, tips, estudiar, express, html, js, javascript, etsit-upm, ejs, node, git, node.js"
+    copyright = "Marcos Gómez"
+    menuMore = "Ver más"
+    readMore = "Leer más"
+    readOtherPosts = "Leer otros posts"
+    newerPosts = "Posts nuevos"
+    olderPosts = "Posts antiguos"
+    missingContentMessage = "Oooops este camino no llega a ningún sitio!"
+    missingBackButtonLabel = "Regresar al Home"
+
+    [languages.es.params.logo]
+      logoText = "CORE Study Hub"
+      logoHomeLink = "/"
+
+    [languages.es.menu]
+      [[languages.es.menu.main]]
+        identifier = "about"
+        name = "Sobre mí"
+        url = "/about"
+      [[languages.es.menu.main]]
+        identifier = "showcase"
+        name = "Showcase"
+        url = "/showcase"
