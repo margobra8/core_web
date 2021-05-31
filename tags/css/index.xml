@@ -69,7 +69,7 @@ color: purple;
 &amp;lt;/div&amp;gt;
 &amp;lt;h1&amp;gt;&amp;lt;span class=&amp;#34;no-narrow&amp;#34;&amp;gt;The&amp;lt;/span&amp;gt; Quiz &amp;lt;span class=&amp;#34;no-narrow&amp;#34;&amp;gt;Site&amp;lt;/span&amp;gt;&amp;lt;/h1&amp;gt;
 &amp;lt;!-- aquí insertamos la imagen que nos piden --&amp;gt;
-&amp;lt;img src=&amp;#34;http//example.com/headerlogo.png&amp;#34; /&amp;gt;
+&amp;lt;img src=&amp;#34;http://example.com/headerlogo.png&amp;#34; /&amp;gt;
 &amp;lt;/header&amp;gt;
 [...]
 &lt;/code>&lt;/pre>
