@@ -180,7 +180,7 @@ Aplicaríamos este middleware antes como cualquier otro.
 
 ### Acceso restringido para admins durante una franja de tiempo y para nadie fuera de ella
 
-Ahora veremos el caso en el que emplearemos cascadas de middlewares para implementar las funcionalidades que queramos. Esto es por si en el examen nos dan middlewares ya hechos y disponibles y nos piden usarlos. Para este ejemplo consideraremos que tenemos un middleware ya proporcionado que es `sessionController.isAdmin` que nos deja ontinuar si somos admins y hemos implementado el primer middleware por horas de este post: `sessionController.hourRestrictionAnyUser`.
+Ahora veremos el caso en el que emplearemos cascadas de middlewares para implementar las funcionalidades que queramos. Esto es por si en el examen nos dan middlewares ya hechos y disponibles y nos piden usarlos. Para este ejemplo consideraremos que tenemos un middleware ya proporcionado que es `sessionController.isAdmin` que nos deja continuar si somos admins y hemos implementado el primer middleware por horas de este post: `sessionController.hourRestrictionAnyUser`.
 
 El truco está en usar estos dos middlewares para comprobar que somos admins primero, y luego comprobar si estamos en las horas permitidas, aunque hayamos diseñado el middleware para "todos los usuarios". Esto es posible gracias a la independencia de los middlewares: uno se centra en comprobar el acceso basado en tiempo y el otro basado en roles. Si ambos los usamos conjuntamente crearemos una condición no-excluyente. Claro está que si necesitamos comportamientos más avanzados podemos implementar soluciones más avanzadas como `sessionController.hourRestrictionMixed`.
 
