@@ -43,10 +43,10 @@ De esta manera, cuando el usuario haga un GET a esta ruta se pasará el control 
 
 Para acomodar las puntuaciones por grupo tenemos que modificar el modelo de `Group` añadiendo un campo de puntuación, eso lo haremos en el archivo del modelo correspondiente:
 
-{{< code language="js" title="routes/index.js" expand="Show" collapse="Hide" isCollapsed="false" >}}
+{{< code language="js" title="models/group.js" expand="Show" collapse="Hide" isCollapsed="false" >}}
 const { Model } = require("sequelize");
 
-// Definition of the Quiz model:
+// Definition of the Group model:
 
 module.exports = (sequelize, DataTypes) => {
   class Group extends Model {}
