@@ -9,8 +9,8 @@ Acceso a cada página permitido sólo un número X de veces Este problema lo pod
 &lt;h4 id="un-contador-para-cada-página">Un contador para cada página&lt;/h4>
 &lt;p>Crearemos un controlador en &lt;code>controllers/session.js&lt;/code> que se encargue de verificar el acceso y contabilizar los accesos nuevos.&lt;/p>
 &lt;div class="collapsable-code">
-&lt;input id="473286519" type="checkbox" />
-&lt;label for="473286519">
+&lt;input id="824167953" type="checkbox" />
+&lt;label for="824167953">
 &lt;span class="collapsable-code__language">js&lt;/span>
 &lt;span class="collapsable-code__title">controllers/session.js&lt;/span>
 &lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
@@ -38,8 +38,8 @@ res.redirect(&amp;#34;/&amp;#34;);
 &lt;/div>
 &lt;p>Ahora sólo tenemos que incluir este middleware &lt;strong>antes&lt;/strong> del resto de middlewares para las rutas en las que las queramos aplicar, por ejemplo:&lt;/p>
 &lt;div class="collapsable-code">
-&lt;input id="361795482" type="checkbox" />
-&lt;label for="361795482">
+&lt;input id="532467918" type="checkbox" />
+&lt;label for="532467918">
 &lt;span class="collapsable-code__language">js&lt;/span>
 &lt;span class="collapsable-code__title">routes/index.js&lt;/span>
 &lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
@@ -51,8 +51,8 @@ router.get(&amp;#34;/groups&amp;#34;, sessionController.visitLimitPerPage, group
 &lt;h4 id="un-contador-para-todas-las-páginas">Un contador para todas las páginas&lt;/h4>
 &lt;p>Modificando un poco el middleware anterior se puede conseguir lo mismo pero con un contador común en &lt;code>session&lt;/code>:&lt;/p>
 &lt;div class="collapsable-code">
-&lt;input id="624873519" type="checkbox" />
-&lt;label for="624873519">
+&lt;input id="379856142" type="checkbox" />
+&lt;label for="379856142">
 &lt;span class="collapsable-code__language">js&lt;/span>
 &lt;span class="collapsable-code__title">controllers/session.js&lt;/span>
 &lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
@@ -79,8 +79,8 @@ res.redirect(&amp;#34;/&amp;#34;);
 &lt;p>Para que la cuenta se mantenga durante sesiones es necesario que se almacene de manera persistente. La manera idónea sería crear un modelo &lt;code>Page&lt;/code> que tuviese los campos de &lt;code>url&lt;/code> y &lt;code>visits&lt;/code>, creáramos todas las páginas actuales con un seeder y las migraciones correspondientes. Sin embargo, esto es muy tedioso y largo. Optaremos por otro método similar al anterior pero empleando una variable global nutriéndonos del objeto &lt;code>global&lt;/code> que proporciona node.&lt;/p>
 &lt;p>En este caso sólo implementaré la situación de cuentas distintas por página porque es el caso más particular, se deja la implementación del caso del contador general persistente para el lector.&lt;/p>
 &lt;div class="collapsable-code">
-&lt;input id="851274693" type="checkbox" />
-&lt;label for="851274693">
+&lt;input id="896754312" type="checkbox" />
+&lt;label for="896754312">
 &lt;span class="collapsable-code__language">js&lt;/span>
 &lt;span class="collapsable-code__title">controllers/session.js&lt;/span>
 &lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
@@ -117,8 +117,8 @@ res.redirect(&amp;#34;/&amp;#34;);
 &lt;h3 id="acceso-restringido-durante-un-rango-de-horasfecha-para-cualquier-usuario">Acceso restringido durante un rango de horas/fecha para cualquier usuario&lt;/h3>
 &lt;p>Vamos a suponer que queremos que cualquier usuario sólo pueda entrar entre las 17:00 h y las 18:59 h a las páginas que decidamos. Para eso necesitamos crear un nuevo middleware en &lt;code>session&lt;/code>.&lt;/p>
 &lt;div class="collapsable-code">
-&lt;input id="548967231" type="checkbox" />
-&lt;label for="548967231">
+&lt;input id="576839412" type="checkbox" />
+&lt;label for="576839412">
 &lt;span class="collapsable-code__language">js&lt;/span>
 &lt;span class="collapsable-code__title">controllers/session.js&lt;/span>
 &lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
@@ -143,8 +143,8 @@ res.redirect(&amp;#34;/&amp;#34;);
 &lt;h3 id="acceso-restringido-mixto-basado-en-tiempo">Acceso restringido mixto basado en tiempo&lt;/h3>
 &lt;p>Vamos a explorar ahora la situación en la que dejemos pasar a todos los usuarios a una determinada página, pero que durante un rango de horas sólo sea accesible para admins.&lt;/p>
 &lt;div class="collapsable-code">
-&lt;input id="273168549" type="checkbox" />
-&lt;label for="273168549">
+&lt;input id="721638954" type="checkbox" />
+&lt;label for="721638954">
 &lt;span class="collapsable-code__language">js&lt;/span>
 &lt;span class="collapsable-code__title">controllers/session.js&lt;/span>
 &lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
@@ -179,8 +179,8 @@ next();
 &lt;p>El truco está en usar estos dos middlewares para comprobar que somos admins primero, y luego comprobar si estamos en las horas permitidas, aunque hayamos diseñado el middleware para &amp;ldquo;todos los usuarios&amp;rdquo;. Esto es posible gracias a la independencia de los middlewares: uno se centra en comprobar el acceso basado en tiempo y el otro basado en roles. Si ambos los usamos conjuntamente crearemos una condición no-excluyente. Claro está que si necesitamos comportamientos más avanzados podemos implementar soluciones más avanzadas como &lt;code>sessionController.hourRestrictionMixed&lt;/code>.&lt;/p>
 &lt;p>Para hacer este encadenado de middlewares procedemos así:&lt;/p>
 &lt;div class="collapsable-code">
-&lt;input id="569713428" type="checkbox" />
-&lt;label for="569713428">
+&lt;input id="163758924" type="checkbox" />
+&lt;label for="163758924">
 &lt;span class="collapsable-code__language">js&lt;/span>
 &lt;span class="collapsable-code__title">routes/index.js&lt;/span>
 &lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
@@ -197,8 +197,8 @@ Implementación de la ruta Para implementar esta funcionalidad vamos a hacer que
 &lt;p>Para implementar esta funcionalidad vamos a hacer que el usuario pueda visualizar la puntuación de los grupos en una nueva página. Para ello implementaremos una primitiva HTTP &lt;code>GET /scores/&lt;/code> en la que se visualizará una tabla con todas las puntuaciones de todos los grupos. Para gestionar el tema de las puntuaciones crearemos un controlador que se encarge de gestionar todas las primitivas relacionadas con las puntuaciones.&lt;/p>
 &lt;p>De momento supondremos que este controller lo llamaremos &lt;code>scoreController&lt;/code>. Vamos a editar el documento de rutas para incluir la nueva ruta.&lt;/p>
 &lt;div class="collapsable-code">
-&lt;input id="872359146" type="checkbox" />
-&lt;label for="872359146">
+&lt;input id="496315728" type="checkbox" />
+&lt;label for="496315728">
 &lt;span class="collapsable-code__language">js&lt;/span>
 &lt;span class="collapsable-code__title">routes/index.js&lt;/span>
 &lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
@@ -221,8 +221,8 @@ router.get(&amp;#34;/scores&amp;#34;, scoreController.index);
 &lt;h1 id="modificación-del-modelo">Modificación del modelo&lt;/h1>
 &lt;p>Para acomodar las puntuaciones por grupo tenemos que modificar el modelo de &lt;code>Group&lt;/code> añadiendo un campo de puntuación, eso lo haremos en el archivo del modelo correspondiente:&lt;/p>
 &lt;div class="collapsable-code">
-&lt;input id="639287145" type="checkbox" />
-&lt;label for="639287145">
+&lt;input id="352864971" type="checkbox" />
+&lt;label for="352864971">
 &lt;span class="collapsable-code__language">js&lt;/span>
 &lt;span class="collapsable-code__title">models/group.js&lt;/span>
 &lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
@@ -257,8 +257,8 @@ return Group;
 &lt;h2 id="creación-del-controlador">Creación del controlador&lt;/h2>
 &lt;p>Crearemos un nuevo archivo &lt;code>controllers/score.js&lt;/code> para este fin e implementaremos el método index.&lt;/p>
 &lt;div class="collapsable-code">
-&lt;input id="651427839" type="checkbox" />
-&lt;label for="651427839">
+&lt;input id="817653492" type="checkbox" />
+&lt;label for="817653492">
 &lt;span class="collapsable-code__language">js&lt;/span>
 &lt;span class="collapsable-code__title">controllers/score.js&lt;/span>
 &lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
@@ -285,8 +285,8 @@ next(error);
 &lt;h2 id="implementación-de-la-vista">Implementación de la vista&lt;/h2>
 &lt;p>Crearemos una nueva vista para ello: &lt;code>views/scores/index.ejs&lt;/code> basándonos en el index de la vista de groups ya hecha.&lt;/p>
 &lt;div class="collapsable-code">
-&lt;input id="482516397" type="checkbox" />
-&lt;label for="482516397">
+&lt;input id="746382159" type="checkbox" />
+&lt;label for="746382159">
 &lt;span class="collapsable-code__language">html&lt;/span>
 &lt;span class="collapsable-code__title">views/scores/index.ejs&lt;/span>
 &lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
@@ -310,8 +310,8 @@ next(error);
 &lt;h2 id="modificación-de-groupcheck">Modificación de &lt;code>groupCheck&lt;/code>&lt;/h2>
 &lt;p>Para ir sumando las puntuaciones, modificaremos el controlador de groupCheck. En mi caso lo he llamado randomCheck pero es distinto al de los quizzes individuales porque está en el archivo &lt;code>controllers/group.js&lt;/code>.&lt;/p>
 &lt;div class="collapsable-code">
-&lt;input id="237854916" type="checkbox" />
-&lt;label for="237854916">
+&lt;input id="127486935" type="checkbox" />
+&lt;label for="127486935">
 &lt;span class="collapsable-code__language">js&lt;/span>
 &lt;span class="collapsable-code__title">controllers/group.js&lt;/span>
 &lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
@@ -372,8 +372,8 @@ next(error);
 &lt;h2 id="adición-del-enlace">Adición del enlace&lt;/h2>
 &lt;p>Ahora sólo nos falta añadir el enlace en el menú de navegación.&lt;/p>
 &lt;div class="collapsable-code">
-&lt;input id="592347186" type="checkbox" />
-&lt;label for="592347186">
+&lt;input id="194267358" type="checkbox" />
+&lt;label for="194267358">
 &lt;span class="collapsable-code__language">html&lt;/span>
 &lt;span class="collapsable-code__title">views/scores/index.ejs&lt;/span>
 &lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
