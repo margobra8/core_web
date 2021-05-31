@@ -69,7 +69,7 @@ exports.visitLimitGeneral = (req, res, next) => {
     req.session.visits = req.session.visits || 0;
     req.session.visits++;
 
-    // comprobamos que no se excede el número de visitas permitidas para esa página, en ese caso continuamos al siguiente mw, si no, mostramos mensaje y volvemos al home
+    // comprobamos que no se excede el número de visitas global permitido, en ese caso continuamos al siguiente mw, si no, mostramos mensaje y volvemos al home
     if (req.session.visits <= VISIT_LIMIT) {
         next();
     } else {
@@ -78,3 +78,5 @@ exports.visitLimitGeneral = (req, res, next) => {
     }
 }
 {{</code>}}
+
+In progres...
