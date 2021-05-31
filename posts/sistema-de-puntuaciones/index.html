@@ -6,8 +6,8 @@
 #<a href=/tags/sequelize/>sequelize</a>&nbsp;
 #<a href=/tags/models/>models</a>&nbsp;
 #<a href=/tags/controllers/>controllers</a>&nbsp;
-#<a href=/tags/views/>views</a>&nbsp;</span><div class=post-content><div><p>Cuando nos pidan implementar una funcionalidad nueva que se tenga que ver en una nueva &ldquo;página&rdquo; tendremos que tocar las rutas (<code>routes/index.js</code>), las vistas (<code>views/*</code>) e implementar una nueva funcionalidad en el controlador que toque (<code>controllers/*</code>) y en este caso los modelos (<code>models/*</code>).</p><p>A mí personalmente me gusta empezar por lo fácil, implementar la ruta o rutas.</p><h2 id=implementación-de-la-ruta>Implementación de la ruta<a href=#implementación-de-la-ruta class=hanchor arialabel=Anchor>&#8983;</a></h2><p>Para implementar esta funcionalidad vamos a hacer que el usuario pueda visualizar la puntuación de los grupos en una nueva página. Para ello implementaremos una primitiva HTTP <code>GET /scores/</code> en la que se visualizará una tabla con todas las puntuaciones de todos los grupos. Para gestionar el tema de las puntuaciones crearemos un controlador que se encarge de gestionar todas las primitivas relacionadas con las puntuaciones.</p><p>De momento supondremos que este controller lo llamaremos <code>scoreController</code>. Vamos a editar el documento de rutas para incluir la nueva ruta.</p><div class=collapsable-code><input id=897214365 type=checkbox>
-<label for=897214365><span class=collapsable-code__language>js</span>
+#<a href=/tags/views/>views</a>&nbsp;</span><div class=post-content><div><p>Cuando nos pidan implementar una funcionalidad nueva que se tenga que ver en una nueva &ldquo;página&rdquo; tendremos que tocar las rutas (<code>routes/index.js</code>), las vistas (<code>views/*</code>) e implementar una nueva funcionalidad en el controlador que toque (<code>controllers/*</code>) y en este caso los modelos (<code>models/*</code>).</p><p>A mí personalmente me gusta empezar por lo fácil, implementar la ruta o rutas.</p><h2 id=implementación-de-la-ruta>Implementación de la ruta<a href=#implementación-de-la-ruta class=hanchor arialabel=Anchor>&#8983;</a></h2><p>Para implementar esta funcionalidad vamos a hacer que el usuario pueda visualizar la puntuación de los grupos en una nueva página. Para ello implementaremos una primitiva HTTP <code>GET /scores/</code> en la que se visualizará una tabla con todas las puntuaciones de todos los grupos. Para gestionar el tema de las puntuaciones crearemos un controlador que se encarge de gestionar todas las primitivas relacionadas con las puntuaciones.</p><p>De momento supondremos que este controller lo llamaremos <code>scoreController</code>. Vamos a editar el documento de rutas para incluir la nueva ruta.</p><div class=collapsable-code><input id=351279864 type=checkbox>
+<label for=351279864><span class=collapsable-code__language>js</span>
 <span class=collapsable-code__title>routes/index.js</span>
 <span class=collapsable-code__toggle data-label-expand=Show data-label-collapse=Hide></span></label><pre class=language-js><code>
 var express = require(&#34;express&#34;);
@@ -24,8 +24,8 @@ const scoreController = require(&#34;../controllers/score&#34;);
 
 // añadimos una nueva ruta al final del archivo para satisfacer nuestro objetivo
 router.get(&#34;/scores&#34;, scoreController.index);
-</code></pre></div><p>De esta manera, cuando el usuario haga un GET a esta ruta se pasará el control al middleware <code>index</code> de <code>scoreController</code> que ahora crearemos.</p><h1 id=modificación-del-modelo>Modificación del modelo<a href=#modificación-del-modelo class=hanchor arialabel=Anchor>&#8983;</a></h1><p>Para acomodar las puntuaciones por grupo tenemos que modificar el modelo de <code>Group</code> añadiendo un campo de puntuación, eso lo haremos en el archivo del modelo correspondiente:</p><div class=collapsable-code><input id=539187264 type=checkbox>
-<label for=539187264><span class=collapsable-code__language>js</span>
+</code></pre></div><p>De esta manera, cuando el usuario haga un GET a esta ruta se pasará el control al middleware <code>index</code> de <code>scoreController</code> que ahora crearemos.</p><h1 id=modificación-del-modelo>Modificación del modelo<a href=#modificación-del-modelo class=hanchor arialabel=Anchor>&#8983;</a></h1><p>Para acomodar las puntuaciones por grupo tenemos que modificar el modelo de <code>Group</code> añadiendo un campo de puntuación, eso lo haremos en el archivo del modelo correspondiente:</p><div class=collapsable-code><input id=128976435 type=checkbox>
+<label for=128976435><span class=collapsable-code__language>js</span>
 <span class=collapsable-code__title>routes/index.js</span>
 <span class=collapsable-code__toggle data-label-expand=Show data-label-collapse=Hide></span></label><pre class=language-js><code>
 const { Model } = require(&#34;sequelize&#34;);
@@ -55,9 +55,9 @@ module.exports = (sequelize, DataTypes) =&gt; {
 
   return Group;
 };
-</code></pre></div><p>Ahora podemos almacenar en la BBDD la puntuación de cada grupo. Para ello modificaremos <code>groupPlay</code> para ello.</p><h2 id=creación-del-controllador>Creación del controllador<a href=#creación-del-controllador class=hanchor arialabel=Anchor>&#8983;</a></h2><p>Crearemos un nuevo archivo <code>controllers/score.js</code> para este fin e implementaremos el método index.</p><div class=collapsable-code><input id=543296817 type=checkbox>
-<label for=543296817><span class=collapsable-code__language>js</span>
-<span class=collapsable-code__title>routes/index.js</span>
+</code></pre></div><p>Ahora podemos almacenar en la BBDD la puntuación de cada grupo. Para ello modificaremos <code>groupPlay</code> para ello.</p><h2 id=creación-del-controllador>Creación del controllador<a href=#creación-del-controllador class=hanchor arialabel=Anchor>&#8983;</a></h2><p>Crearemos un nuevo archivo <code>controllers/score.js</code> para este fin e implementaremos el método index.</p><div class=collapsable-code><input id=751694283 type=checkbox>
+<label for=751694283><span class=collapsable-code__language>js</span>
+<span class=collapsable-code__title>controllers/score.js</span>
 <span class=collapsable-code__toggle data-label-expand=Show data-label-collapse=Hide></span></label><pre class=language-js><code>
 const Sequelize = require(&#34;sequelize&#34;);
 const Op = Sequelize.Op;
@@ -76,61 +76,30 @@ exports.index = async (req, res, next) =&gt; {
     next(error);
   }
 };
-{{ &lt;/code&gt;}}
+</code></pre></div><p>Se puede ver cómo el código es casi igual al index de groups, y esto es pq al final estamos obteniendo en un array los grupos que hay y sus atributos, entre ellos nombre y puntuación. La diferencia es en el <code>res.render(...)</code> que ahora llamamos a la nueva vista que crearemos.</p><h2 id=implementación-de-la-vista>Implementación de la vista<a href=#implementación-de-la-vista class=hanchor arialabel=Anchor>&#8983;</a></h2><p>Crearemos una nueva vista para ello: <code>views/scores/index.ejs</code> basándonos en el intex de la vista de groups ya hecha.</p><div class=collapsable-code><input id=591287346 type=checkbox>
+<label for=591287346><span class=collapsable-code__language>html</span>
+<span class=collapsable-code__title>views/scores/index.ejs</span>
+<span class=collapsable-code__toggle data-label-expand=Show data-label-collapse=Hide></span></label><pre class=language-html><code>
+&lt;h1&gt;Scores:&lt;/h1&gt;
 
-Se puede ver cómo el código es casi igual al index de groups, y esto es pq al final estamos obteniendo en un array los grupos que hay y sus atributos, entre ellos nombre y puntuación. La diferencia es en el `res.render(...)` que ahora llamamos a la nueva vista que crearemos.
-
-## Implementación de la vista
-
-Crearemos una nueva vista para ello: `views/scores/index.ejs` basándonos en el intex de la vista de groups ya hecha.
-
-
-
-
-  &lt;div class=&#34;collapsable-code&#34;&gt;
-    &lt;input id=&#34;254678931&#34; type=&#34;checkbox&#34;  /&gt;
-    &lt;label for=&#34;254678931&#34;&gt;
-      &lt;span class=&#34;collapsable-code__language&#34;&gt;html&lt;/span&gt;
-      &lt;span class=&#34;collapsable-code__title&#34;&gt;views/scores/index.ejs&lt;/span&gt;
-      &lt;span class=&#34;collapsable-code__toggle&#34; data-label-expand=&#34;Show&#34; data-label-collapse=&#34;Hide&#34;&gt;&lt;/span&gt;
-    &lt;/label&gt;
-    &lt;pre class=&#34;language-html&#34; &gt;&lt;code&gt;
-&amp;lt;h1&amp;gt;Scores:&amp;lt;/h1&amp;gt;
-
-&amp;lt;table&amp;gt;
-  &amp;lt;% for (var i in groups) { %&amp;gt; &amp;lt;% var group = groups[i]; %&amp;gt;
-  &amp;lt;tr&amp;gt;
-    &amp;lt;td&amp;gt;
-      &amp;lt;a href=&amp;#34;/groups/&amp;lt;%= group.id %&amp;gt;/randomplay&amp;#34;&amp;gt;&amp;lt;%= group.name %&amp;gt;&amp;lt;/a&amp;gt;
-    &amp;lt;/td&amp;gt;
-    &amp;lt;td&amp;gt;
-      &amp;lt;p&amp;gt;&amp;lt;%= group.score %&amp;gt;&amp;lt;/p&amp;gt;
-    &amp;lt;/td&amp;gt;
-  &amp;lt;/tr&amp;gt;
-  &amp;lt;% } %&amp;gt;
-&amp;lt;/table&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-  &lt;/div&gt;
-
-
-
-## Modificación de `groupCheck`
-
-Para ir sumando las puntuaciones, modificaremos el controlador de groupCheck. En mi caso lo he llamado randomCheck pero es distinto al de los quizzes individuales porque está en el archivo `controllers/group.js`.
-
-
-
-
-  &lt;div class=&#34;collapsable-code&#34;&gt;
-    &lt;input id=&#34;872946315&#34; type=&#34;checkbox&#34;  /&gt;
-    &lt;label for=&#34;872946315&#34;&gt;
-      &lt;span class=&#34;collapsable-code__language&#34;&gt;js&lt;/span&gt;
-      &lt;span class=&#34;collapsable-code__title&#34;&gt;controllers/group.js&lt;/span&gt;
-      &lt;span class=&#34;collapsable-code__toggle&#34; data-label-expand=&#34;Show&#34; data-label-collapse=&#34;Hide&#34;&gt;&lt;/span&gt;
-    &lt;/label&gt;
-    &lt;pre class=&#34;language-js&#34; &gt;&lt;code&gt;
+&lt;table&gt;
+  &lt;% for (var i in groups) { %&gt; &lt;% var group = groups[i]; %&gt;
+  &lt;tr&gt;
+    &lt;td&gt;
+      &lt;a href=&#34;/groups/&lt;%= group.id %&gt;/randomplay&#34;&gt;&lt;%= group.name %&gt;&lt;/a&gt;
+    &lt;/td&gt;
+    &lt;td&gt;
+      &lt;p&gt;&lt;%= group.score %&gt;&lt;/p&gt;
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;% } %&gt;
+&lt;/table&gt;
+</code></pre></div><h2 id=modificación-de-groupcheck>Modificación de <code>groupCheck</code><a href=#modificación-de-groupcheck class=hanchor arialabel=Anchor>&#8983;</a></h2><p>Para ir sumando las puntuaciones, modificaremos el controlador de groupCheck. En mi caso lo he llamado randomCheck pero es distinto al de los quizzes individuales porque está en el archivo <code>controllers/group.js</code>.</p><div class=collapsable-code><input id=129345768 type=checkbox>
+<label for=129345768><span class=collapsable-code__language>js</span>
+<span class=collapsable-code__title>controllers/group.js</span>
+<span class=collapsable-code__toggle data-label-expand=Show data-label-collapse=Hide></span></label><pre class=language-js><code>
 [...]
-exports.randomCheck = async (req, res, next) =&amp;gt; {
+exports.randomCheck = async (req, res, next) =&gt; {
   const curGroup = req.load.group;
   try {
     req.session.groupsRandomPlay = req.session.groupsRandomPlay || {};
@@ -141,7 +110,7 @@ exports.randomCheck = async (req, res, next) =&amp;gt; {
       lastQuizId: 0,
     };
 
-    const answer = req.query.answer || &amp;#34;&amp;#34;;
+    const answer = req.query.answer || &#34;&#34;;
     const result =
       answer.toLowerCase().trim() === req.load.quiz.answer.toLowerCase().trim();
 
@@ -160,9 +129,9 @@ exports.randomCheck = async (req, res, next) =&amp;gt; {
       const score = req.session.groupsRandomPlay[curGroup.id].resolved.length;
 
       // actualizamos el score del group en cuestión
-      curGroup = await curGroup.save({fields: [&amp;#34;score&amp;#34;]});
+      curGroup = await curGroup.save({fields: [&#34;score&#34;]});
 
-      res.render(&amp;#34;groups/random_result&amp;#34;, {
+      res.render(&#34;groups/random_result&#34;, {
         group: curGroup,
         result,
         answer,
@@ -171,7 +140,7 @@ exports.randomCheck = async (req, res, next) =&amp;gt; {
     } else {
       const score = req.session.groupsRandomPlay[curGroup.id].resolved.length;
       delete req.session.groupsRandomPlay[curGroup.id];
-      res.render(&amp;#34;groups/random_result&amp;#34;, {
+      res.render(&#34;groups/random_result&#34;, {
         group: curGroup,
         result,
         answer,
@@ -183,40 +152,18 @@ exports.randomCheck = async (req, res, next) =&amp;gt; {
   }
 };
 [...]
-&lt;/code&gt;&lt;/pre&gt;
-  &lt;/div&gt;
-
-
-
-## Adición del enlace
-
-Ahora sólo nos falta añadir el enlace en el menú de navegación.
-
-
-
-
-  &lt;div class=&#34;collapsable-code&#34;&gt;
-    &lt;input id=&#34;318625974&#34; type=&#34;checkbox&#34;  /&gt;
-    &lt;label for=&#34;318625974&#34;&gt;
-      &lt;span class=&#34;collapsable-code__language&#34;&gt;html&lt;/span&gt;
-      &lt;span class=&#34;collapsable-code__title&#34;&gt;views/scores/index.ejs&lt;/span&gt;
-      &lt;span class=&#34;collapsable-code__toggle&#34; data-label-expand=&#34;Show&#34; data-label-collapse=&#34;Hide&#34;&gt;&lt;/span&gt;
-    &lt;/label&gt;
-    &lt;pre class=&#34;language-html&#34; &gt;&lt;code&gt;
-&amp;lt;nav class=&amp;#34;main&amp;#34; id=&amp;#34;mainNav&amp;#34; role=&amp;#34;navigation&amp;#34;&amp;gt;
-  &amp;lt;a href=&amp;#34;/&amp;#34;&amp;gt;Home&amp;lt;/a&amp;gt;
-  &amp;lt;a href=&amp;#34;/quizzes&amp;#34;&amp;gt;Quizzes&amp;lt;/a&amp;gt;
-  &amp;lt;a href=&amp;#34;/author&amp;#34;&amp;gt;Author&amp;lt;/a&amp;gt;
-  &amp;lt;a href=&amp;#34;/groups&amp;#34;&amp;gt;Groups&amp;lt;/a&amp;gt;
-  &amp;lt;a href=&amp;#34;/scores&amp;#34;&amp;gt;Groups Scores&amp;lt;/a&amp;gt;
-  &amp;lt;% if (locals.loginUser) { %&amp;gt;
-      &amp;lt;a href=&amp;#34;/users&amp;#34;&amp;gt;Users&amp;lt;/a&amp;gt;
-  &amp;lt;% } %&amp;gt;
-&amp;lt;/nav&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-  &lt;/div&gt;
-
-
-
-Y ya estaría!!!! :)
-</code></pre></div></div></div></div></div><footer class=footer><div class=footer__inner><div class="copyright copyright--user"><span>© 2021 Marcos Gómez</span></div></div></footer><script src=/assets/main.js></script><script src=/assets/prism.js></script></div></body></html>
+</code></pre></div><h2 id=adición-del-enlace>Adición del enlace<a href=#adición-del-enlace class=hanchor arialabel=Anchor>&#8983;</a></h2><p>Ahora sólo nos falta añadir el enlace en el menú de navegación.</p><div class=collapsable-code><input id=346925871 type=checkbox>
+<label for=346925871><span class=collapsable-code__language>html</span>
+<span class=collapsable-code__title>views/scores/index.ejs</span>
+<span class=collapsable-code__toggle data-label-expand=Show data-label-collapse=Hide></span></label><pre class=language-html><code>
+&lt;nav class=&#34;main&#34; id=&#34;mainNav&#34; role=&#34;navigation&#34;&gt;
+  &lt;a href=&#34;/&#34;&gt;Home&lt;/a&gt;
+  &lt;a href=&#34;/quizzes&#34;&gt;Quizzes&lt;/a&gt;
+  &lt;a href=&#34;/author&#34;&gt;Author&lt;/a&gt;
+  &lt;a href=&#34;/groups&#34;&gt;Groups&lt;/a&gt;
+  &lt;a href=&#34;/scores&#34;&gt;Groups Scores&lt;/a&gt;
+  &lt;% if (locals.loginUser) { %&gt;
+      &lt;a href=&#34;/users&#34;&gt;Users&lt;/a&gt;
+  &lt;% } %&gt;
+&lt;/nav&gt;
+</code></pre></div><p>Y ya estaría!!!! :)</p></div></div></div></div><footer class=footer><div class=footer__inner><div class="copyright copyright--user"><span>© 2021 Marcos Gómez</span></div></div></footer><script src=/assets/main.js></script><script src=/assets/prism.js></script></div></body></html>

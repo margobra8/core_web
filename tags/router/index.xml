@@ -6,8 +6,8 @@ Implementación de la ruta Para implementar esta funcionalidad vamos a hacer que
 &lt;p>Para implementar esta funcionalidad vamos a hacer que el usuario pueda visualizar la puntuación de los grupos en una nueva página. Para ello implementaremos una primitiva HTTP &lt;code>GET /scores/&lt;/code> en la que se visualizará una tabla con todas las puntuaciones de todos los grupos. Para gestionar el tema de las puntuaciones crearemos un controlador que se encarge de gestionar todas las primitivas relacionadas con las puntuaciones.&lt;/p>
 &lt;p>De momento supondremos que este controller lo llamaremos &lt;code>scoreController&lt;/code>. Vamos a editar el documento de rutas para incluir la nueva ruta.&lt;/p>
 &lt;div class="collapsable-code">
-&lt;input id="897214365" type="checkbox" />
-&lt;label for="897214365">
+&lt;input id="351279864" type="checkbox" />
+&lt;label for="351279864">
 &lt;span class="collapsable-code__language">js&lt;/span>
 &lt;span class="collapsable-code__title">routes/index.js&lt;/span>
 &lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
@@ -30,8 +30,8 @@ router.get(&amp;#34;/scores&amp;#34;, scoreController.index);
 &lt;h1 id="modificación-del-modelo">Modificación del modelo&lt;/h1>
 &lt;p>Para acomodar las puntuaciones por grupo tenemos que modificar el modelo de &lt;code>Group&lt;/code> añadiendo un campo de puntuación, eso lo haremos en el archivo del modelo correspondiente:&lt;/p>
 &lt;div class="collapsable-code">
-&lt;input id="539187264" type="checkbox" />
-&lt;label for="539187264">
+&lt;input id="128976435" type="checkbox" />
+&lt;label for="128976435">
 &lt;span class="collapsable-code__language">js&lt;/span>
 &lt;span class="collapsable-code__title">routes/index.js&lt;/span>
 &lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
@@ -66,10 +66,10 @@ return Group;
 &lt;h2 id="creación-del-controllador">Creación del controllador&lt;/h2>
 &lt;p>Crearemos un nuevo archivo &lt;code>controllers/score.js&lt;/code> para este fin e implementaremos el método index.&lt;/p>
 &lt;div class="collapsable-code">
-&lt;input id="543296817" type="checkbox" />
-&lt;label for="543296817">
+&lt;input id="751694283" type="checkbox" />
+&lt;label for="751694283">
 &lt;span class="collapsable-code__language">js&lt;/span>
-&lt;span class="collapsable-code__title">routes/index.js&lt;/span>
+&lt;span class="collapsable-code__title">controllers/score.js&lt;/span>
 &lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
 &lt;/label>
 &lt;pre class="language-js" >&lt;code>
@@ -88,45 +88,46 @@ groups,
 next(error);
 }
 };
-{{ &amp;lt;/code&amp;gt;}}
-Se puede ver cómo el código es casi igual al index de groups, y esto es pq al final estamos obteniendo en un array los grupos que hay y sus atributos, entre ellos nombre y puntuación. La diferencia es en el `res.render(...)` que ahora llamamos a la nueva vista que crearemos.
-## Implementación de la vista
-Crearemos una nueva vista para ello: `views/scores/index.ejs` basándonos en el intex de la vista de groups ya hecha.
-&amp;lt;div class=&amp;#34;collapsable-code&amp;#34;&amp;gt;
-&amp;lt;input id=&amp;#34;254678931&amp;#34; type=&amp;#34;checkbox&amp;#34; /&amp;gt;
-&amp;lt;label for=&amp;#34;254678931&amp;#34;&amp;gt;
-&amp;lt;span class=&amp;#34;collapsable-code__language&amp;#34;&amp;gt;html&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;collapsable-code__title&amp;#34;&amp;gt;views/scores/index.ejs&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;collapsable-code__toggle&amp;#34; data-label-expand=&amp;#34;Show&amp;#34; data-label-collapse=&amp;#34;Hide&amp;#34;&amp;gt;&amp;lt;/span&amp;gt;
-&amp;lt;/label&amp;gt;
-&amp;lt;pre class=&amp;#34;language-html&amp;#34; &amp;gt;&amp;lt;code&amp;gt;
-&amp;amp;lt;h1&amp;amp;gt;Scores:&amp;amp;lt;/h1&amp;amp;gt;
-&amp;amp;lt;table&amp;amp;gt;
-&amp;amp;lt;% for (var i in groups) { %&amp;amp;gt; &amp;amp;lt;% var group = groups[i]; %&amp;amp;gt;
-&amp;amp;lt;tr&amp;amp;gt;
-&amp;amp;lt;td&amp;amp;gt;
-&amp;amp;lt;a href=&amp;amp;#34;/groups/&amp;amp;lt;%= group.id %&amp;amp;gt;/randomplay&amp;amp;#34;&amp;amp;gt;&amp;amp;lt;%= group.name %&amp;amp;gt;&amp;amp;lt;/a&amp;amp;gt;
-&amp;amp;lt;/td&amp;amp;gt;
-&amp;amp;lt;td&amp;amp;gt;
-&amp;amp;lt;p&amp;amp;gt;&amp;amp;lt;%= group.score %&amp;amp;gt;&amp;amp;lt;/p&amp;amp;gt;
-&amp;amp;lt;/td&amp;amp;gt;
-&amp;amp;lt;/tr&amp;amp;gt;
-&amp;amp;lt;% } %&amp;amp;gt;
-&amp;amp;lt;/table&amp;amp;gt;
-&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
-&amp;lt;/div&amp;gt;
-## Modificación de `groupCheck`
-Para ir sumando las puntuaciones, modificaremos el controlador de groupCheck. En mi caso lo he llamado randomCheck pero es distinto al de los quizzes individuales porque está en el archivo `controllers/group.js`.
-&amp;lt;div class=&amp;#34;collapsable-code&amp;#34;&amp;gt;
-&amp;lt;input id=&amp;#34;872946315&amp;#34; type=&amp;#34;checkbox&amp;#34; /&amp;gt;
-&amp;lt;label for=&amp;#34;872946315&amp;#34;&amp;gt;
-&amp;lt;span class=&amp;#34;collapsable-code__language&amp;#34;&amp;gt;js&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;collapsable-code__title&amp;#34;&amp;gt;controllers/group.js&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;collapsable-code__toggle&amp;#34; data-label-expand=&amp;#34;Show&amp;#34; data-label-collapse=&amp;#34;Hide&amp;#34;&amp;gt;&amp;lt;/span&amp;gt;
-&amp;lt;/label&amp;gt;
-&amp;lt;pre class=&amp;#34;language-js&amp;#34; &amp;gt;&amp;lt;code&amp;gt;
+&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;p>Se puede ver cómo el código es casi igual al index de groups, y esto es pq al final estamos obteniendo en un array los grupos que hay y sus atributos, entre ellos nombre y puntuación. La diferencia es en el &lt;code>res.render(...)&lt;/code> que ahora llamamos a la nueva vista que crearemos.&lt;/p>
+&lt;h2 id="implementación-de-la-vista">Implementación de la vista&lt;/h2>
+&lt;p>Crearemos una nueva vista para ello: &lt;code>views/scores/index.ejs&lt;/code> basándonos en el intex de la vista de groups ya hecha.&lt;/p>
+&lt;div class="collapsable-code">
+&lt;input id="591287346" type="checkbox" />
+&lt;label for="591287346">
+&lt;span class="collapsable-code__language">html&lt;/span>
+&lt;span class="collapsable-code__title">views/scores/index.ejs&lt;/span>
+&lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
+&lt;/label>
+&lt;pre class="language-html" >&lt;code>
+&amp;lt;h1&amp;gt;Scores:&amp;lt;/h1&amp;gt;
+&amp;lt;table&amp;gt;
+&amp;lt;% for (var i in groups) { %&amp;gt; &amp;lt;% var group = groups[i]; %&amp;gt;
+&amp;lt;tr&amp;gt;
+&amp;lt;td&amp;gt;
+&amp;lt;a href=&amp;#34;/groups/&amp;lt;%= group.id %&amp;gt;/randomplay&amp;#34;&amp;gt;&amp;lt;%= group.name %&amp;gt;&amp;lt;/a&amp;gt;
+&amp;lt;/td&amp;gt;
+&amp;lt;td&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;%= group.score %&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;/td&amp;gt;
+&amp;lt;/tr&amp;gt;
+&amp;lt;% } %&amp;gt;
+&amp;lt;/table&amp;gt;
+&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;h2 id="modificación-de-groupcheck">Modificación de &lt;code>groupCheck&lt;/code>&lt;/h2>
+&lt;p>Para ir sumando las puntuaciones, modificaremos el controlador de groupCheck. En mi caso lo he llamado randomCheck pero es distinto al de los quizzes individuales porque está en el archivo &lt;code>controllers/group.js&lt;/code>.&lt;/p>
+&lt;div class="collapsable-code">
+&lt;input id="129345768" type="checkbox" />
+&lt;label for="129345768">
+&lt;span class="collapsable-code__language">js&lt;/span>
+&lt;span class="collapsable-code__title">controllers/group.js&lt;/span>
+&lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
+&lt;/label>
+&lt;pre class="language-js" >&lt;code>
 [...]
-exports.randomCheck = async (req, res, next) =&amp;amp;gt; {
+exports.randomCheck = async (req, res, next) =&amp;gt; {
 const curGroup = req.load.group;
 try {
 req.session.groupsRandomPlay = req.session.groupsRandomPlay || {};
@@ -136,7 +137,7 @@ curGroup.id
 resolved: [],
 lastQuizId: 0,
 };
-const answer = req.query.answer || &amp;amp;#34;&amp;amp;#34;;
+const answer = req.query.answer || &amp;#34;&amp;#34;;
 const result =
 answer.toLowerCase().trim() === req.load.quiz.answer.toLowerCase().trim();
 if (result) {
@@ -152,8 +153,8 @@ req.load.quiz.id
 }
 const score = req.session.groupsRandomPlay[curGroup.id].resolved.length;
 // actualizamos el score del group en cuestión
-curGroup = await curGroup.save({fields: [&amp;amp;#34;score&amp;amp;#34;]});
-res.render(&amp;amp;#34;groups/random_result&amp;amp;#34;, {
+curGroup = await curGroup.save({fields: [&amp;#34;score&amp;#34;]});
+res.render(&amp;#34;groups/random_result&amp;#34;, {
 group: curGroup,
 result,
 answer,
@@ -162,7 +163,7 @@ score,
 } else {
 const score = req.session.groupsRandomPlay[curGroup.id].resolved.length;
 delete req.session.groupsRandomPlay[curGroup.id];
-res.render(&amp;amp;#34;groups/random_result&amp;amp;#34;, {
+res.render(&amp;#34;groups/random_result&amp;#34;, {
 group: curGroup,
 result,
 answer,
@@ -174,30 +175,28 @@ next(error);
 }
 };
 [...]
-&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
-&amp;lt;/div&amp;gt;
-## Adición del enlace
-Ahora sólo nos falta añadir el enlace en el menú de navegación.
-&amp;lt;div class=&amp;#34;collapsable-code&amp;#34;&amp;gt;
-&amp;lt;input id=&amp;#34;318625974&amp;#34; type=&amp;#34;checkbox&amp;#34; /&amp;gt;
-&amp;lt;label for=&amp;#34;318625974&amp;#34;&amp;gt;
-&amp;lt;span class=&amp;#34;collapsable-code__language&amp;#34;&amp;gt;html&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;collapsable-code__title&amp;#34;&amp;gt;views/scores/index.ejs&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;#34;collapsable-code__toggle&amp;#34; data-label-expand=&amp;#34;Show&amp;#34; data-label-collapse=&amp;#34;Hide&amp;#34;&amp;gt;&amp;lt;/span&amp;gt;
-&amp;lt;/label&amp;gt;
-&amp;lt;pre class=&amp;#34;language-html&amp;#34; &amp;gt;&amp;lt;code&amp;gt;
-&amp;amp;lt;nav class=&amp;amp;#34;main&amp;amp;#34; id=&amp;amp;#34;mainNav&amp;amp;#34; role=&amp;amp;#34;navigation&amp;amp;#34;&amp;amp;gt;
-&amp;amp;lt;a href=&amp;amp;#34;/&amp;amp;#34;&amp;amp;gt;Home&amp;amp;lt;/a&amp;amp;gt;
-&amp;amp;lt;a href=&amp;amp;#34;/quizzes&amp;amp;#34;&amp;amp;gt;Quizzes&amp;amp;lt;/a&amp;amp;gt;
-&amp;amp;lt;a href=&amp;amp;#34;/author&amp;amp;#34;&amp;amp;gt;Author&amp;amp;lt;/a&amp;amp;gt;
-&amp;amp;lt;a href=&amp;amp;#34;/groups&amp;amp;#34;&amp;amp;gt;Groups&amp;amp;lt;/a&amp;amp;gt;
-&amp;amp;lt;a href=&amp;amp;#34;/scores&amp;amp;#34;&amp;amp;gt;Groups Scores&amp;amp;lt;/a&amp;amp;gt;
-&amp;amp;lt;% if (locals.loginUser) { %&amp;amp;gt;
-&amp;amp;lt;a href=&amp;amp;#34;/users&amp;amp;#34;&amp;amp;gt;Users&amp;amp;lt;/a&amp;amp;gt;
-&amp;amp;lt;% } %&amp;amp;gt;
-&amp;amp;lt;/nav&amp;amp;gt;
-&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
-&amp;lt;/div&amp;gt;
-Y ya estaría!!!! :)
 &lt;/code>&lt;/pre>
-&lt;/div></content></item></channel></rss>
+&lt;/div>
+&lt;h2 id="adición-del-enlace">Adición del enlace&lt;/h2>
+&lt;p>Ahora sólo nos falta añadir el enlace en el menú de navegación.&lt;/p>
+&lt;div class="collapsable-code">
+&lt;input id="346925871" type="checkbox" />
+&lt;label for="346925871">
+&lt;span class="collapsable-code__language">html&lt;/span>
+&lt;span class="collapsable-code__title">views/scores/index.ejs&lt;/span>
+&lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
+&lt;/label>
+&lt;pre class="language-html" >&lt;code>
+&amp;lt;nav class=&amp;#34;main&amp;#34; id=&amp;#34;mainNav&amp;#34; role=&amp;#34;navigation&amp;#34;&amp;gt;
+&amp;lt;a href=&amp;#34;/&amp;#34;&amp;gt;Home&amp;lt;/a&amp;gt;
+&amp;lt;a href=&amp;#34;/quizzes&amp;#34;&amp;gt;Quizzes&amp;lt;/a&amp;gt;
+&amp;lt;a href=&amp;#34;/author&amp;#34;&amp;gt;Author&amp;lt;/a&amp;gt;
+&amp;lt;a href=&amp;#34;/groups&amp;#34;&amp;gt;Groups&amp;lt;/a&amp;gt;
+&amp;lt;a href=&amp;#34;/scores&amp;#34;&amp;gt;Groups Scores&amp;lt;/a&amp;gt;
+&amp;lt;% if (locals.loginUser) { %&amp;gt;
+&amp;lt;a href=&amp;#34;/users&amp;#34;&amp;gt;Users&amp;lt;/a&amp;gt;
+&amp;lt;% } %&amp;gt;
+&amp;lt;/nav&amp;gt;
+&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;p>Y ya estaría!!!! :)&lt;/p></content></item></channel></rss>
