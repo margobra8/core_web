@@ -13,7 +13,7 @@ paginate = 5
   themeColor = "green"
 
   # if you set this to 0, only submenu trigger will be visible
-  showMenuItems = 2
+  showMenuItems = 0
 
   # show selector to switch language
   showLanguageSelector = false
@@ -22,7 +22,7 @@ paginate = 5
   fullWidthTheme = false
 
   # center theme with default width
-  centerTheme = false
+  centerTheme = true
 
   # set a custom favicon (default is a `themeColor` square)
   # favicon = "favicon.ico"
@@ -52,7 +52,7 @@ paginate = 5
     owner = "Marcos Gómez"
     keywords = "core, etsit, parcial, exámenes, tips, estudiar, express, html, js, javascript, etsit-upm, ejs, node, git, node.js"
     copyright = "Marcos Gómez"
-    menuMore = "Ver más"
+    menuMore = "Menú"
     readMore = "Leer más"
     readOtherPosts = "Leer otros posts"
     newerPosts = "Posts nuevos"
