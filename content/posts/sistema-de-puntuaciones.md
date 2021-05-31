@@ -75,7 +75,7 @@ module.exports = (sequelize, DataTypes) => {
 
 Ahora podemos almacenar en la BBDD la puntuación de cada grupo. Para ello modificaremos `groupPlay` para ello.
 
-## Creación del controllador
+## Creación del controlador
 
 Crearemos un nuevo archivo `controllers/score.js` para este fin e implementaremos el método index.
 
@@ -99,11 +99,11 @@ exports.index = async (req, res, next) => {
 };
 {{</code>}}
 
-Se puede ver cómo el código es casi igual al index de groups, y esto es pq al final estamos obteniendo en un array los grupos que hay y sus atributos, entre ellos nombre y puntuación. La diferencia es en el `res.render(...)` que ahora llamamos a la nueva vista que crearemos.
+Se puede ver cómo el código es casi igual al index de groups, y esto es porque al final estamos obteniendo en un array los grupos que hay y sus atributos, entre ellos nombre y puntuación. La diferencia es en el `res.render(...)` que ahora llamamos a la nueva vista que crearemos.
 
 ## Implementación de la vista
 
-Crearemos una nueva vista para ello: `views/scores/index.ejs` basándonos en el intex de la vista de groups ya hecha.
+Crearemos una nueva vista para ello: `views/scores/index.ejs` basándonos en el index de la vista de groups ya hecha.
 
 {{< code language="html" title="views/scores/index.ejs" expand="Show" collapse="Hide" isCollapsed="false" >}}
 <h1>Scores:</h1>
