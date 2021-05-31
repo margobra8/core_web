@@ -6,8 +6,8 @@
 #<a href=/tags/sequelize/>sequelize</a>&nbsp;
 #<a href=/tags/models/>models</a>&nbsp;
 #<a href=/tags/controllers/>controllers</a>&nbsp;
-#<a href=/tags/views/>views</a>&nbsp;</span><div class=post-content><div><p>En el examen nos pueden pedir restringir el acceso a ciertas páginas, pudiendo éstas ser visualizadas un número determinado de veces o sólo por algunos usuarios durante ciertas horas del día.</p><p>Iremos paso a paso viendo que modificaciones se tienen que hacer en cada caso. Todos estos controles se implementan como middlewares en el controlador <code>controllers/session.js</code></p><h2 id=acceso-a-cada-página-permitido-sólo-un-número-x-de-veces>Acceso a cada página permitido sólo un número X de veces<a href=#acceso-a-cada-página-permitido-sólo-un-número-x-de-veces class=hanchor arialabel=Anchor>&#8983;</a></h2><p>Este problema lo podemos resolver de varias maneras dependiendo de lo que queramos conseguir. Si queremos que el número de accesos realizados se resetee al volver a entrar a la página, haremos el control de acceso a través de <code>session</code>. Si queremos que el cambio sea persistente y para todos los usuarios, modificaremos los modelos.</p><h3 id=control-no-persistente-mediante-session>Control no persistente (mediante <code>session</code>)<a href=#control-no-persistente-mediante-session class=hanchor arialabel=Anchor>&#8983;</a></h3><p>Para hacer esto posible crearemos un nuevo middleware que va a ir generando y almacenando el número de veces que entramos en una página y el límite que establezcamos lo fijaremos en una variable que podemos tocar. Haremos dos versiones de esto: que el contador sea dependiente de cada página, o que el contador se aplique y tenga en cuenta para todas las páginas.</p><h4 id=un-contador-para-cada-página>Un contador para cada página<a href=#un-contador-para-cada-página class=hanchor arialabel=Anchor>&#8983;</a></h4><p>Crearemos un controlador en <code>controllers/session.js</code> que se encargue de verificar el acceso y contabilizar los accesos nuevos.</p><div class=collapsable-code><input id=392847615 type=checkbox>
-<label for=392847615><span class=collapsable-code__language>js</span>
+#<a href=/tags/views/>views</a>&nbsp;</span><div class=post-content><div><p>En el examen nos pueden pedir restringir el acceso a ciertas páginas, pudiendo éstas ser visualizadas un número determinado de veces o sólo por algunos usuarios durante ciertas horas del día.</p><p>Iremos paso a paso viendo que modificaciones se tienen que hacer en cada caso. Todos estos controles se implementan como middlewares en el controlador <code>controllers/session.js</code></p><h2 id=acceso-a-cada-página-permitido-sólo-un-número-x-de-veces>Acceso a cada página permitido sólo un número X de veces<a href=#acceso-a-cada-página-permitido-sólo-un-número-x-de-veces class=hanchor arialabel=Anchor>&#8983;</a></h2><p>Este problema lo podemos resolver de varias maneras dependiendo de lo que queramos conseguir. Si queremos que el número de accesos realizados se resetee al volver a entrar a la página, haremos el control de acceso a través de <code>session</code>. Si queremos que el cambio sea persistente y para todos los usuarios, modificaremos los modelos o usaremos una variable global.</p><h3 id=control-no-persistente-mediante-session>Control no persistente (mediante <code>session</code>)<a href=#control-no-persistente-mediante-session class=hanchor arialabel=Anchor>&#8983;</a></h3><p>Para hacer esto posible crearemos un nuevo middleware que va a ir generando y almacenando el número de veces que entramos en una página y el límite que establezcamos lo fijaremos en una variable que podemos tocar. Haremos dos versiones de esto: que el contador sea dependiente de cada página, o que el contador se aplique y tenga en cuenta para todas las páginas.</p><h4 id=un-contador-para-cada-página>Un contador para cada página<a href=#un-contador-para-cada-página class=hanchor arialabel=Anchor>&#8983;</a></h4><p>Crearemos un controlador en <code>controllers/session.js</code> que se encargue de verificar el acceso y contabilizar los accesos nuevos.</p><div class=collapsable-code><input id=593241678 type=checkbox>
+<label for=593241678><span class=collapsable-code__language>js</span>
 <span class=collapsable-code__title>controllers/session.js</span>
 <span class=collapsable-code__toggle data-label-expand=Show data-label-collapse=Hide></span></label><pre class=language-js><code>
 exports.visitLimitPerPage = (req, res, next) =&gt; {
@@ -32,13 +32,13 @@ exports.visitLimitPerPage = (req, res, next) =&gt; {
         res.redirect(&#34;/&#34;);
     }
 }
-</code></pre></div><p>Ahora sólo tenemos que incluir este middleware <strong>antes</strong> del resto de middlewares para las rutas en las que las queramos aplicar, por ejemplo:</p><div class=collapsable-code><input id=213467589 type=checkbox>
-<label for=213467589><span class=collapsable-code__language>js</span>
+</code></pre></div><p>Ahora sólo tenemos que incluir este middleware <strong>antes</strong> del resto de middlewares para las rutas en las que las queramos aplicar, por ejemplo:</p><div class=collapsable-code><input id=819362475 type=checkbox>
+<label for=819362475><span class=collapsable-code__language>js</span>
 <span class=collapsable-code__title>routes/index.js</span>
 <span class=collapsable-code__toggle data-label-expand=Show data-label-collapse=Hide></span></label><pre class=language-js><code>
 router.get(&#34;/groups&#34;, sessionController.visitLimitPerPage, groupController.index);
-</code></pre></div><h4 id=un-contador-para-todas-las-páginas>Un contador para todas las páginas<a href=#un-contador-para-todas-las-páginas class=hanchor arialabel=Anchor>&#8983;</a></h4><p>Modificando un poco el middleware anterior se puede conseguir lo mismo pero con un contador común en <code>session</code>:</p><div class=collapsable-code><input id=683579124 type=checkbox>
-<label for=683579124><span class=collapsable-code__language>js</span>
+</code></pre></div><h4 id=un-contador-para-todas-las-páginas>Un contador para todas las páginas<a href=#un-contador-para-todas-las-páginas class=hanchor arialabel=Anchor>&#8983;</a></h4><p>Modificando un poco el middleware anterior se puede conseguir lo mismo pero con un contador común en <code>session</code>:</p><div class=collapsable-code><input id=761524389 type=checkbox>
+<label for=761524389><span class=collapsable-code__language>js</span>
 <span class=collapsable-code__title>controllers/session.js</span>
 <span class=collapsable-code__toggle data-label-expand=Show data-label-collapse=Hide></span></label><pre class=language-js><code>
 exports.visitLimitGeneral = (req, res, next) =&gt; {
@@ -57,4 +57,30 @@ exports.visitLimitGeneral = (req, res, next) =&gt; {
         res.redirect(&#34;/&#34;);
     }
 }
-</code></pre></div><p>In progres&mldr;</p></div></div></div></div><footer class=footer><div class=footer__inner><div class="copyright copyright--user"><span>© 2021 Marcos Gómez</span></div></div></footer><script src=/assets/main.js></script><script src=/assets/prism.js></script></div></body></html>
+</code></pre></div><p>Añadiríamos este middleware a todas las rutas que lo necesiten como en el apartado anterior.</p><h3 id=contador-persistente>Contador persistente<a href=#contador-persistente class=hanchor arialabel=Anchor>&#8983;</a></h3><p>Para que la cuenta se mantenga durante sesiones es necesario que se almacene de manera persistente. La manera idónea sería crear un modelo <code>Page</code> que tuviese los campos de <code>url</code> y <code>visits</code>, creáramos todas las páginas actuales con un seeder y las migraciones correspondientes. Sin embargo, esto es muy tedioso y largo. Optaremos por otro método similar al anterior pero empleando una variable global nutriéndonos del objeto <code>global</code> que proporciona node.</p><p>En este caso sólo implementaré la situación de cuentas distintas por página porque es el caso más particular, se deja la implementación del caso del cotador general persistente para el lector.</p><div class=collapsable-code><input id=329761458 type=checkbox>
+<label for=329761458><span class=collapsable-code__language>js</span>
+<span class=collapsable-code__title>controllers/session.js</span>
+<span class=collapsable-code__toggle data-label-expand=Show data-label-collapse=Hide></span></label><pre class=language-js><code>
+exports.visitLimitPerPageGlobal = (req, res, next) =&gt; {
+    // establecemos el límite de visitas para cada página
+    const VISIT_LIMIT = 10;
+
+    // almacenamos en una variable la ruta a la que accede el usuario
+    const url = req.url;
+
+    // creamos el objeto global.visits donde almacenaremos un objeto con las visitas a cada página o cogemos el objeto ya presente
+    global.visits = global.visits || {};
+
+    // almacenamos un nuevo valor de visita para cada ruta o creamos la primera visita a esa página
+    global.visits[url] = global.visits[url] || 0;
+    global.visits[url]&#43;&#43;;
+
+    // comprobamos que no se excede el número de visitas permitidas para esa página, en ese caso continuamos al siguiente mw, si no, mostramos mensaje y volvemos al home
+    if (global.visits[url] &lt;= VISIT_LIMIT) {
+        next();
+    } else {
+        req.flash(&#34;error&#34;, &#34;You have depleted the amount of visits permitted to &#34; &#43; url);
+        res.redirect(&#34;/&#34;);
+    }
+}
+</code></pre></div><p>In progress&mldr;</p></div></div></div></div><footer class=footer><div class=footer__inner><div class="copyright copyright--user"><span>© 2021 Marcos Gómez</span></div></div></footer><script src=/assets/main.js></script><script src=/assets/prism.js></script></div></body></html>
