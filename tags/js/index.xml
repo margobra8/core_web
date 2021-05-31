@@ -6,8 +6,8 @@ Implementación de la ruta Para implementar esta funcionalidad vamos a hacer que
 &lt;p>Para implementar esta funcionalidad vamos a hacer que el usuario pueda visualizar la puntuación de los grupos en una nueva página. Para ello implementaremos una primitiva HTTP &lt;code>GET /scores/&lt;/code> en la que se visualizará una tabla con todas las puntuaciones de todos los grupos. Para gestionar el tema de las puntuaciones crearemos un controlador que se encarge de gestionar todas las primitivas relacionadas con las puntuaciones.&lt;/p>
 &lt;p>De momento supondremos que este controller lo llamaremos &lt;code>scoreController&lt;/code>. Vamos a editar el documento de rutas para incluir la nueva ruta.&lt;/p>
 &lt;div class="collapsable-code">
-&lt;input id="984215367" type="checkbox" />
-&lt;label for="984215367">
+&lt;input id="598427163" type="checkbox" />
+&lt;label for="598427163">
 &lt;span class="collapsable-code__language">js&lt;/span>
 &lt;span class="collapsable-code__title">routes/index.js&lt;/span>
 &lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
@@ -30,8 +30,8 @@ router.get(&amp;#34;/scores&amp;#34;, scoreController.index);
 &lt;h1 id="modificación-del-modelo">Modificación del modelo&lt;/h1>
 &lt;p>Para acomodar las puntuaciones por grupo tenemos que modificar el modelo de &lt;code>Group&lt;/code> añadiendo un campo de puntuación, eso lo haremos en el archivo del modelo correspondiente:&lt;/p>
 &lt;div class="collapsable-code">
-&lt;input id="431792658" type="checkbox" />
-&lt;label for="431792658">
+&lt;input id="596842371" type="checkbox" />
+&lt;label for="596842371">
 &lt;span class="collapsable-code__language">js&lt;/span>
 &lt;span class="collapsable-code__title">models/group.js&lt;/span>
 &lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
@@ -66,8 +66,8 @@ return Group;
 &lt;h2 id="creación-del-controlador">Creación del controlador&lt;/h2>
 &lt;p>Crearemos un nuevo archivo &lt;code>controllers/score.js&lt;/code> para este fin e implementaremos el método index.&lt;/p>
 &lt;div class="collapsable-code">
-&lt;input id="925683147" type="checkbox" />
-&lt;label for="925683147">
+&lt;input id="579143628" type="checkbox" />
+&lt;label for="579143628">
 &lt;span class="collapsable-code__language">js&lt;/span>
 &lt;span class="collapsable-code__title">controllers/score.js&lt;/span>
 &lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
@@ -94,8 +94,8 @@ next(error);
 &lt;h2 id="implementación-de-la-vista">Implementación de la vista&lt;/h2>
 &lt;p>Crearemos una nueva vista para ello: &lt;code>views/scores/index.ejs&lt;/code> basándonos en el index de la vista de groups ya hecha.&lt;/p>
 &lt;div class="collapsable-code">
-&lt;input id="123645978" type="checkbox" />
-&lt;label for="123645978">
+&lt;input id="327684915" type="checkbox" />
+&lt;label for="327684915">
 &lt;span class="collapsable-code__language">html&lt;/span>
 &lt;span class="collapsable-code__title">views/scores/index.ejs&lt;/span>
 &lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
@@ -119,8 +119,8 @@ next(error);
 &lt;h2 id="modificación-de-groupcheck">Modificación de &lt;code>groupCheck&lt;/code>&lt;/h2>
 &lt;p>Para ir sumando las puntuaciones, modificaremos el controlador de groupCheck. En mi caso lo he llamado randomCheck pero es distinto al de los quizzes individuales porque está en el archivo &lt;code>controllers/group.js&lt;/code>.&lt;/p>
 &lt;div class="collapsable-code">
-&lt;input id="417859632" type="checkbox" />
-&lt;label for="417859632">
+&lt;input id="596378421" type="checkbox" />
+&lt;label for="596378421">
 &lt;span class="collapsable-code__language">js&lt;/span>
 &lt;span class="collapsable-code__title">controllers/group.js&lt;/span>
 &lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
@@ -153,6 +153,7 @@ req.load.quiz.id
 }
 const score = req.session.groupsRandomPlay[curGroup.id].resolved.length;
 // actualizamos el score del group en cuestión
+curGroup.score = score;
 curGroup = await curGroup.save({fields: [&amp;#34;score&amp;#34;]});
 res.render(&amp;#34;groups/random_result&amp;#34;, {
 group: curGroup,
@@ -180,8 +181,8 @@ next(error);
 &lt;h2 id="adición-del-enlace">Adición del enlace&lt;/h2>
 &lt;p>Ahora sólo nos falta añadir el enlace en el menú de navegación.&lt;/p>
 &lt;div class="collapsable-code">
-&lt;input id="278156493" type="checkbox" />
-&lt;label for="278156493">
+&lt;input id="419568372" type="checkbox" />
+&lt;label for="419568372">
 &lt;span class="collapsable-code__language">html&lt;/span>
 &lt;span class="collapsable-code__title">views/scores/index.ejs&lt;/span>
 &lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
