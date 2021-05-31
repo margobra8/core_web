@@ -1,0 +1,58 @@
+<!doctype html><html lang=es><head><title>Control de acceso :: CORE Study Hub</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="En este post se detalla como hacer que ciertas páginas solo se puedan ver un determinado número de veces o durante unas horas del día"><meta name=keywords content="core,etsit,parcial,exámenes,tips,estudiar,express,html,js,javascript,etsit-upm,ejs,node,git,node.js"><meta name=robots content="noodp"><link rel=canonical href=/posts/control-de-acceso/><link rel=stylesheet href=/assets/style.css><link rel=stylesheet href=/assets/green.css><link rel=apple-touch-icon href=/img/apple-touch-icon-192x192.png><link rel="shortcut icon" href=/img/favicon/green.png><meta name=twitter:card content="summary"><meta name=twitter:site content="https://core.marquitos.space/"><meta name=twitter:creator content="usualmarcos"><meta property="og:locale" content="es"><meta property="og:type" content="article"><meta property="og:title" content="Control de acceso"><meta property="og:description" content="En este post se detalla como hacer que ciertas páginas solo se puedan ver un determinado número de veces o durante unas horas del día"><meta property="og:url" content="/posts/control-de-acceso/"><meta property="og:site_name" content="CORE Study Hub"><meta property="og:image" content="/"><meta property="og:image:width" content="2048"><meta property="og:image:height" content="1024"><meta property="article:published_time" content="2021-05-31 20:04:17 +0200 +0200"></head><body class=green><div class="container headings--one-size"><header class=header><div class=header__inner><div class=header__logo><a href=/><div class=logo>CORE Study Hub</div></a></div><div class=menu-trigger>menu</div></div><nav class=menu><ul class="menu__inner menu__inner--desktop"><li><a href=https://me.marquitos.space/>Sobre mí</a></li></ul><ul class="menu__inner menu__inner--mobile"><li><a href=https://me.marquitos.space/>Sobre mí</a></li></ul></nav></header><div class=content><div class=post><h1 class=post-title><a href=/posts/control-de-acceso/>Control de acceso</a></h1><div class=post-meta><span class=post-date>2021-05-31</span>
+<span class=post-author>:: Marcos Gómez</span></div><span class=post-tags>#<a href=/tags/js/>js</a>&nbsp;
+#<a href=/tags/html/>html</a>&nbsp;
+#<a href=/tags/router/>router</a>&nbsp;
+#<a href=/tags/routes/>routes</a>&nbsp;
+#<a href=/tags/sequelize/>sequelize</a>&nbsp;
+#<a href=/tags/models/>models</a>&nbsp;
+#<a href=/tags/controllers/>controllers</a>&nbsp;
+#<a href=/tags/views/>views</a>&nbsp;</span><div class=post-content><div><p>En el examen nos pueden pedir restringir el acceso a ciertas páginas, pudiendo éstas ser visualizadas un número determinado de veces o sólo por algunos usuarios durante ciertas horas del día.</p><p>Iremos paso a paso viendo que modificaciones se tienen que hacer en cada caso. Todos estos controles se implementan como middlewares en el controlador <code>controllers/session.js</code></p><h2 id=acceso-a-cada-página-permitido-sólo-un-número-x-de-veces>Acceso a cada página permitido sólo un número X de veces<a href=#acceso-a-cada-página-permitido-sólo-un-número-x-de-veces class=hanchor arialabel=Anchor>&#8983;</a></h2><p>Este problema lo podemos resolver de varias maneras dependiendo de lo que queramos conseguir. Si queremos que el número de accesos realizados se resetee al volver a entrar a la página, haremos el control de acceso a través de <code>session</code>. Si queremos que el cambio sea persistente y para todos los usuarios, modificaremos los modelos.</p><h3 id=control-no-persistente-mediante-session>Control no persistente (mediante <code>session</code>)<a href=#control-no-persistente-mediante-session class=hanchor arialabel=Anchor>&#8983;</a></h3><p>Para hacer esto posible crearemos un nuevo middleware que va a ir generando y almacenando el número de veces que entramos en una página y el límite que establezcamos lo fijaremos en una variable que podemos tocar. Haremos dos versiones de esto: que el contador sea dependiente de cada página, o que el contador se aplique y tenga en cuenta para todas las páginas.</p><h4 id=un-contador-para-cada-página>Un contador para cada página<a href=#un-contador-para-cada-página class=hanchor arialabel=Anchor>&#8983;</a></h4><p>Crearemos un controlador en <code>controllers/session.js</code> que se encargue de verificar el acceso y contabilizar los accesos nuevos.</p><div class=collapsable-code><input id=826314975 type=checkbox>
+<label for=826314975><span class=collapsable-code__language>js</span>
+<span class=collapsable-code__title>controllers/session.js</span>
+<span class=collapsable-code__toggle data-label-expand=Show data-label-collapse=Hide></span></label><pre class=language-js><code>
+exports.visitLimitPerPage = (req, res, next) =&gt; {
+    // establecemos el límite de visitas para cada página
+    const VISIT_LIMIT = 10;
+
+    // almacenamos en una variable la ruta a la que accede el usuario
+    const url = req.url;
+
+    // creamos el objeto req.session.visits donde almacenaremos un objeto con las visitas a cada página o cogemos el objeto ya presente
+    req.session.visits = req.session.visits || {};
+
+    // almacenamos un nuevo valor de visita para cada ruta o creamos la primera visita a esa página
+    req.session.visits[url] = req.session.visits[url] || 1;
+
+    // comprobamos que no se excede el número de visitas permitidas para esa página, en ese caso continuamos al siguiente mw, si no, mostramos mensaje y volvemos al home
+    if (req.session.visits[url] &lt;= VISIT_LIMIT) {
+        next();
+    } else {
+        req.flash(&#34;error&#34;, &#34;You have depleted the amount of visits permitted to &#34; &#43; url);
+        res.redirect(&#34;/&#34;);
+    }
+}
+</code></pre></div><p>Ahora sólo tenemos que incluir este middleware <strong>antes</strong> del resto de middlewares para las rutas en las que las queramos aplicar, por ejemplo:</p><div class=collapsable-code><input id=953218476 type=checkbox>
+<label for=953218476><span class=collapsable-code__language>js</span>
+<span class=collapsable-code__title>routes/index.js</span>
+<span class=collapsable-code__toggle data-label-expand=Show data-label-collapse=Hide></span></label><pre class=language-js><code>
+router.get(&#34;/groups&#34;, sessionController.visitLimitPerPage, groupController.index);
+</code></pre></div><h4 id=un-contador-para-todas-las-páginas>Un contador para todas las páginas<a href=#un-contador-para-todas-las-páginas class=hanchor arialabel=Anchor>&#8983;</a></h4><p>Modificando un poco el middleware anterior se puede conseguir lo mismo pero con un contador común en <code>session</code>:</p><div class=collapsable-code><input id=697412583 type=checkbox>
+<label for=697412583><span class=collapsable-code__language>js</span>
+<span class=collapsable-code__title>controllers/session.js</span>
+<span class=collapsable-code__toggle data-label-expand=Show data-label-collapse=Hide></span></label><pre class=language-js><code>
+exports.visitLimitGeneral = (req, res, next) =&gt; {
+    // establecemos el límite de visitas general
+    const VISIT_LIMIT = 10;
+
+    // creamos el objeto req.session.visits donde almacenaremos un objeto con las visitas totales o cogemos el objeto ya presente
+    req.session.visits = req.session.visits || 1;
+
+    // comprobamos que no se excede el número de visitas permitidas para esa página, en ese caso continuamos al siguiente mw, si no, mostramos mensaje y volvemos al home
+    if (req.session.visits &lt;= VISIT_LIMIT) {
+        next();
+    } else {
+        req.flash(&#34;error&#34;, &#34;You have depleted the amount of visits permitted to &#34; &#43; url);
+        res.redirect(&#34;/&#34;);
+    }
+}
+</code></pre></div></div></div></div></div><footer class=footer><div class=footer__inner><div class="copyright copyright--user"><span>© 2021 Marcos Gómez</span></div></div></footer><script src=/assets/main.js></script><script src=/assets/prism.js></script></div></body></html>
