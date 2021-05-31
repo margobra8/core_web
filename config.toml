@@ -68,8 +68,5 @@ paginate = 5
       [[languages.es.menu.main]]
         identifier = "about"
         name = "Sobre mí"
-        url = "/about"
-      [[languages.es.menu.main]]
-        identifier = "showcase"
-        name = "Showcase"
-        url = "/showcase"
+        url = "https://me.marquitos.space/"
+
