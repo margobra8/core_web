@@ -167,8 +167,8 @@ exports.hourRestrictionMixed = (req, res, next) => {
         if (isAdmin) {
             next();
         } else {
-        req.flash("error", "No visits allowed from normal users for this page at " + new Date());
-        res.redirect("/");
+            req.flash("error", "No visits allowed from normal users for this page at " + new Date());
+            res.redirect("/");
         }
     } else {
         next();
