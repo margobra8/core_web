@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>html on CORE Study Hub</title><link>/tags/html/</link><description>Recent content in html on CORE Study Hub</description><generator>Hugo -- gohugo.io</generator><language>es</language><copyright>Marcos Gómez</copyright><lastBuildDate>Mon, 31 May 2021 19:04:17 +0200</lastBuildDate><atom:link href="/tags/html/index.xml" rel="self" type="application/rss+xml"/><item><title>Sistema de puntuaciones</title><link>/posts/sistema-de-puntuaciones/</link><pubDate>Mon, 31 May 2021 19:04:17 +0200</pubDate><guid>/posts/sistema-de-puntuaciones/</guid><description>Cuando nos pidan implementar una funcionalidad nueva que se tenga que ver en una nueva &amp;ldquo;página&amp;rdquo; tendremos que tocar las rutas (routes/index.js), las vistas (views/*) e implementar una nueva funcionalidad en el controlador que toque (controllers/*) y en este caso los modelos (models/*).
+A mí personalmente me gusta empezar por lo fácil, implementar la ruta o rutas.
+Implementación de la ruta Para implementar esta funcionalidad vamos a hacer que el usuario pueda visualizar la puntuación de los grupos en una nueva página.</description><content>&lt;p>Cuando nos pidan implementar una funcionalidad nueva que se tenga que ver en una nueva &amp;ldquo;página&amp;rdquo; tendremos que tocar las rutas (&lt;code>routes/index.js&lt;/code>), las vistas (&lt;code>views/*&lt;/code>) e implementar una nueva funcionalidad en el controlador que toque (&lt;code>controllers/*&lt;/code>) y en este caso los modelos (&lt;code>models/*&lt;/code>).&lt;/p>
+&lt;p>A mí personalmente me gusta empezar por lo fácil, implementar la ruta o rutas.&lt;/p>
+&lt;h2 id="implementación-de-la-ruta">Implementación de la ruta&lt;/h2>
+&lt;p>Para implementar esta funcionalidad vamos a hacer que el usuario pueda visualizar la puntuación de los grupos en una nueva página. Para ello implementaremos una primitiva HTTP &lt;code>GET /scores/&lt;/code> en la que se visualizará una tabla con todas las puntuaciones de todos los grupos. Para gestionar el tema de las puntuaciones crearemos un controlador que se encarge de gestionar todas las primitivas relacionadas con las puntuaciones.&lt;/p>
+&lt;p>De momento supondremos que este controller lo llamaremos &lt;code>scoreController&lt;/code>. Vamos a editar el documento de rutas para incluir la nueva ruta.&lt;/p>
+&lt;div class="collapsable-code">
+&lt;input id="897214365" type="checkbox" />
+&lt;label for="897214365">
+&lt;span class="collapsable-code__language">js&lt;/span>
+&lt;span class="collapsable-code__title">routes/index.js&lt;/span>
+&lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
+&lt;/label>
+&lt;pre class="language-js" >&lt;code>
+var express = require(&amp;#34;express&amp;#34;);
+var router = express.Router();
+const quizController = require(&amp;#34;../controllers/quiz&amp;#34;);
+const userController = require(&amp;#34;../controllers/user&amp;#34;);
+const sessionController = require(&amp;#34;../controllers/session&amp;#34;);
+const groupController = require(&amp;#34;../controllers/group&amp;#34;);
+// añadimos nuestro controlador que luego crearemos
+const scoreController = require(&amp;#34;../controllers/score&amp;#34;);
+[...]
+// añadimos una nueva ruta al final del archivo para satisfacer nuestro objetivo
+router.get(&amp;#34;/scores&amp;#34;, scoreController.index);
+&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;p>De esta manera, cuando el usuario haga un GET a esta ruta se pasará el control al middleware &lt;code>index&lt;/code> de &lt;code>scoreController&lt;/code> que ahora crearemos.&lt;/p>
+&lt;h1 id="modificación-del-modelo">Modificación del modelo&lt;/h1>
+&lt;p>Para acomodar las puntuaciones por grupo tenemos que modificar el modelo de &lt;code>Group&lt;/code> añadiendo un campo de puntuación, eso lo haremos en el archivo del modelo correspondiente:&lt;/p>
+&lt;div class="collapsable-code">
+&lt;input id="539187264" type="checkbox" />
+&lt;label for="539187264">
+&lt;span class="collapsable-code__language">js&lt;/span>
+&lt;span class="collapsable-code__title">routes/index.js&lt;/span>
+&lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
+&lt;/label>
+&lt;pre class="language-js" >&lt;code>
+const { Model } = require(&amp;#34;sequelize&amp;#34;);
+// Definition of the Quiz model:
+module.exports = (sequelize, DataTypes) =&amp;gt; {
+class Group extends Model {}
+Group.init(
+{
+name: {
+type: DataTypes.STRING,
+unique: true,
+validate: { notEmpty: { msg: &amp;#34;Group name must not be empty&amp;#34; } },
+},
+// añadimos el nuevo campo
+score: {
+type: DataTypes.INTEGER,
+defaultValue: 0
+}
+},
+{
+sequelize,
+}
+);
+return Group;
+};
+&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;p>Ahora podemos almacenar en la BBDD la puntuación de cada grupo. Para ello modificaremos &lt;code>groupPlay&lt;/code> para ello.&lt;/p>
+&lt;h2 id="creación-del-controllador">Creación del controllador&lt;/h2>
+&lt;p>Crearemos un nuevo archivo &lt;code>controllers/score.js&lt;/code> para este fin e implementaremos el método index.&lt;/p>
+&lt;div class="collapsable-code">
+&lt;input id="543296817" type="checkbox" />
+&lt;label for="543296817">
+&lt;span class="collapsable-code__language">js&lt;/span>
+&lt;span class="collapsable-code__title">routes/index.js&lt;/span>
+&lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
+&lt;/label>
+&lt;pre class="language-js" >&lt;code>
+const Sequelize = require(&amp;#34;sequelize&amp;#34;);
+const Op = Sequelize.Op;
+const { models } = require(&amp;#34;../models&amp;#34;)
+[...]
+// GET /index
+exports.index = async (req, res, next) =&amp;gt; {
+try {
+const groups = await models.Group.findAll();
+res.render(&amp;#34;scores/index.ejs&amp;#34;, {
+groups,
+});
+} catch (error) {
+next(error);
+}
+};
+{{ &amp;lt;/code&amp;gt;}}
+Se puede ver cómo el código es casi igual al index de groups, y esto es pq al final estamos obteniendo en un array los grupos que hay y sus atributos, entre ellos nombre y puntuación. La diferencia es en el `res.render(...)` que ahora llamamos a la nueva vista que crearemos.
+## Implementación de la vista
+Crearemos una nueva vista para ello: `views/scores/index.ejs` basándonos en el intex de la vista de groups ya hecha.
+&amp;lt;div class=&amp;#34;collapsable-code&amp;#34;&amp;gt;
+&amp;lt;input id=&amp;#34;254678931&amp;#34; type=&amp;#34;checkbox&amp;#34; /&amp;gt;
+&amp;lt;label for=&amp;#34;254678931&amp;#34;&amp;gt;
+&amp;lt;span class=&amp;#34;collapsable-code__language&amp;#34;&amp;gt;html&amp;lt;/span&amp;gt;
+&amp;lt;span class=&amp;#34;collapsable-code__title&amp;#34;&amp;gt;views/scores/index.ejs&amp;lt;/span&amp;gt;
+&amp;lt;span class=&amp;#34;collapsable-code__toggle&amp;#34; data-label-expand=&amp;#34;Show&amp;#34; data-label-collapse=&amp;#34;Hide&amp;#34;&amp;gt;&amp;lt;/span&amp;gt;
+&amp;lt;/label&amp;gt;
+&amp;lt;pre class=&amp;#34;language-html&amp;#34; &amp;gt;&amp;lt;code&amp;gt;
+&amp;amp;lt;h1&amp;amp;gt;Scores:&amp;amp;lt;/h1&amp;amp;gt;
+&amp;amp;lt;table&amp;amp;gt;
+&amp;amp;lt;% for (var i in groups) { %&amp;amp;gt; &amp;amp;lt;% var group = groups[i]; %&amp;amp;gt;
+&amp;amp;lt;tr&amp;amp;gt;
+&amp;amp;lt;td&amp;amp;gt;
+&amp;amp;lt;a href=&amp;amp;#34;/groups/&amp;amp;lt;%= group.id %&amp;amp;gt;/randomplay&amp;amp;#34;&amp;amp;gt;&amp;amp;lt;%= group.name %&amp;amp;gt;&amp;amp;lt;/a&amp;amp;gt;
+&amp;amp;lt;/td&amp;amp;gt;
+&amp;amp;lt;td&amp;amp;gt;
+&amp;amp;lt;p&amp;amp;gt;&amp;amp;lt;%= group.score %&amp;amp;gt;&amp;amp;lt;/p&amp;amp;gt;
+&amp;amp;lt;/td&amp;amp;gt;
+&amp;amp;lt;/tr&amp;amp;gt;
+&amp;amp;lt;% } %&amp;amp;gt;
+&amp;amp;lt;/table&amp;amp;gt;
+&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+## Modificación de `groupCheck`
+Para ir sumando las puntuaciones, modificaremos el controlador de groupCheck. En mi caso lo he llamado randomCheck pero es distinto al de los quizzes individuales porque está en el archivo `controllers/group.js`.
+&amp;lt;div class=&amp;#34;collapsable-code&amp;#34;&amp;gt;
+&amp;lt;input id=&amp;#34;872946315&amp;#34; type=&amp;#34;checkbox&amp;#34; /&amp;gt;
+&amp;lt;label for=&amp;#34;872946315&amp;#34;&amp;gt;
+&amp;lt;span class=&amp;#34;collapsable-code__language&amp;#34;&amp;gt;js&amp;lt;/span&amp;gt;
+&amp;lt;span class=&amp;#34;collapsable-code__title&amp;#34;&amp;gt;controllers/group.js&amp;lt;/span&amp;gt;
+&amp;lt;span class=&amp;#34;collapsable-code__toggle&amp;#34; data-label-expand=&amp;#34;Show&amp;#34; data-label-collapse=&amp;#34;Hide&amp;#34;&amp;gt;&amp;lt;/span&amp;gt;
+&amp;lt;/label&amp;gt;
+&amp;lt;pre class=&amp;#34;language-js&amp;#34; &amp;gt;&amp;lt;code&amp;gt;
+[...]
+exports.randomCheck = async (req, res, next) =&amp;amp;gt; {
+const curGroup = req.load.group;
+try {
+req.session.groupsRandomPlay = req.session.groupsRandomPlay || {};
+req.session.groupsRandomPlay[curGroup.id] = req.session.groupsRandomPlay[
+curGroup.id
+] || {
+resolved: [],
+lastQuizId: 0,
+};
+const answer = req.query.answer || &amp;amp;#34;&amp;amp;#34;;
+const result =
+answer.toLowerCase().trim() === req.load.quiz.answer.toLowerCase().trim();
+if (result) {
+req.session.groupsRandomPlay[curGroup.id].lastQuizId = 0;
+if (
+req.session.groupsRandomPlay[curGroup.id].resolved.indexOf(
+req.load.quiz.id
+) === -1
+) {
+req.session.groupsRandomPlay[curGroup.id].resolved.push(
+req.load.quiz.id
+);
+}
+const score = req.session.groupsRandomPlay[curGroup.id].resolved.length;
+// actualizamos el score del group en cuestión
+curGroup = await curGroup.save({fields: [&amp;amp;#34;score&amp;amp;#34;]});
+res.render(&amp;amp;#34;groups/random_result&amp;amp;#34;, {
+group: curGroup,
+result,
+answer,
+score,
+});
+} else {
+const score = req.session.groupsRandomPlay[curGroup.id].resolved.length;
+delete req.session.groupsRandomPlay[curGroup.id];
+res.render(&amp;amp;#34;groups/random_result&amp;amp;#34;, {
+group: curGroup,
+result,
+answer,
+score,
+});
+}
+} catch (error) {
+next(error);
+}
+};
+[...]
+&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+## Adición del enlace
+Ahora sólo nos falta añadir el enlace en el menú de navegación.
+&amp;lt;div class=&amp;#34;collapsable-code&amp;#34;&amp;gt;
+&amp;lt;input id=&amp;#34;318625974&amp;#34; type=&amp;#34;checkbox&amp;#34; /&amp;gt;
+&amp;lt;label for=&amp;#34;318625974&amp;#34;&amp;gt;
+&amp;lt;span class=&amp;#34;collapsable-code__language&amp;#34;&amp;gt;html&amp;lt;/span&amp;gt;
+&amp;lt;span class=&amp;#34;collapsable-code__title&amp;#34;&amp;gt;views/scores/index.ejs&amp;lt;/span&amp;gt;
+&amp;lt;span class=&amp;#34;collapsable-code__toggle&amp;#34; data-label-expand=&amp;#34;Show&amp;#34; data-label-collapse=&amp;#34;Hide&amp;#34;&amp;gt;&amp;lt;/span&amp;gt;
+&amp;lt;/label&amp;gt;
+&amp;lt;pre class=&amp;#34;language-html&amp;#34; &amp;gt;&amp;lt;code&amp;gt;
+&amp;amp;lt;nav class=&amp;amp;#34;main&amp;amp;#34; id=&amp;amp;#34;mainNav&amp;amp;#34; role=&amp;amp;#34;navigation&amp;amp;#34;&amp;amp;gt;
+&amp;amp;lt;a href=&amp;amp;#34;/&amp;amp;#34;&amp;amp;gt;Home&amp;amp;lt;/a&amp;amp;gt;
+&amp;amp;lt;a href=&amp;amp;#34;/quizzes&amp;amp;#34;&amp;amp;gt;Quizzes&amp;amp;lt;/a&amp;amp;gt;
+&amp;amp;lt;a href=&amp;amp;#34;/author&amp;amp;#34;&amp;amp;gt;Author&amp;amp;lt;/a&amp;amp;gt;
+&amp;amp;lt;a href=&amp;amp;#34;/groups&amp;amp;#34;&amp;amp;gt;Groups&amp;amp;lt;/a&amp;amp;gt;
+&amp;amp;lt;a href=&amp;amp;#34;/scores&amp;amp;#34;&amp;amp;gt;Groups Scores&amp;amp;lt;/a&amp;amp;gt;
+&amp;amp;lt;% if (locals.loginUser) { %&amp;amp;gt;
+&amp;amp;lt;a href=&amp;amp;#34;/users&amp;amp;#34;&amp;amp;gt;Users&amp;amp;lt;/a&amp;amp;gt;
+&amp;amp;lt;% } %&amp;amp;gt;
+&amp;amp;lt;/nav&amp;amp;gt;
+&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;/div&amp;gt;
+Y ya estaría!!!! :)
+&lt;/code>&lt;/pre>
+&lt;/div></content></item><item><title>Cambiar el aspecto</title><link>/posts/cambiar-el-aspecto/</link><pubDate>Mon, 31 May 2021 18:04:17 +0200</pubDate><guid>/posts/cambiar-el-aspecto/</guid><description>Aspecto visual En el examen nos pueden pedir que cambiemos el aspecto de la interfaz del proyecto. Por lo general modificaremos el aspecto empleando CSS mediante la modificación de los archivos public/stylesheets/*.css que vienen en el proyecto.
+Un ejemplo sería cambiar la fuente de la interfaz eso lo podemos hacer modificando el siguiente archivo:
+css public/stylesheets/layout.css body { font: &amp;#34;Open Sans&amp;#34;; } Otro ejemplo lo tenemos si queremos cambiar el típico fondo amarillo que hay en los cuadros de respuestas por otro color.</description><content>&lt;h2 id="aspecto-visual">Aspecto visual&lt;/h2>
+&lt;p>En el examen nos pueden pedir que cambiemos el aspecto de la interfaz del proyecto. Por lo general modificaremos el aspecto empleando CSS mediante la modificación de los archivos &lt;code>public/stylesheets/*.css&lt;/code> que vienen en el proyecto.&lt;/p>
+&lt;p>Un ejemplo sería cambiar la fuente de la interfaz eso lo podemos hacer modificando el siguiente archivo:&lt;/p>
+&lt;div class="collapsable-code">
+&lt;input id="1" type="checkbox" />
+&lt;label for="1">
+&lt;span class="collapsable-code__language">css&lt;/span>
+&lt;span class="collapsable-code__title">public/stylesheets/layout.css&lt;/span>
+&lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
+&lt;/label>
+&lt;pre class="language-css" >&lt;code>
+body {
+font: &amp;#34;Open Sans&amp;#34;;
+}
+&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;p>Otro ejemplo lo tenemos si queremos cambiar el típico fondo amarillo que hay en los cuadros de respuestas por otro color. Para cambiarlo a verde podemos, por ejemplo, hacer lo siguiente:&lt;/p>
+&lt;div class="collapsable-code">
+&lt;input id="1" type="checkbox" />
+&lt;label for="1">
+&lt;span class="collapsable-code__language">css&lt;/span>
+&lt;span class="collapsable-code__title">public/stylesheets/layout.css&lt;/span>
+&lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
+&lt;/label>
+&lt;pre class="language-css" >&lt;code>
+input[type=text]:focus, input[type=password]:focus {
+background-color: green;
+height: 24px;
+}
+&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;p>Por último a continuación se muestra si queremos poner el color del texto de la página web de diferente color (ej. morado):&lt;/p>
+&lt;div class="collapsable-code">
+&lt;input id="1" type="checkbox" />
+&lt;label for="1">
+&lt;span class="collapsable-code__language">css&lt;/span>
+&lt;span class="collapsable-code__title">public/stylesheets/layout.css&lt;/span>
+&lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
+&lt;/label>
+&lt;pre class="language-css" >&lt;code>
+body {
+color: purple;
+}
+&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;h2 id="adición-de-imagen-en-la-cabecera">Adición de imagen en la cabecera&lt;/h2>
+&lt;p>Nos pueden pedir añadir una imagen en la cabecera de la página web donde ahora mismo se muestra el texto &amp;ldquo;The Quiz Site&amp;rdquo;.&lt;/p>
+&lt;img src="/img/header.png" alt="header" class="center" />
+&lt;p>Para eso tenemos que editar el HTML que ahora mismo se renderiza como vistas a través de el motor de renderizado EJS. Para editar el marcado HTML de la página web, lo debemos hacer en &lt;code>views/*&lt;/code>. En este caso como queremos editar el documento base (layout) editaremos &lt;code>views/layout.ejs&lt;/code>.&lt;/p>
+&lt;div class="collapsable-code">
+&lt;input id="1" type="checkbox" />
+&lt;label for="1">
+&lt;span class="collapsable-code__language">html&lt;/span>
+&lt;span class="collapsable-code__title">views/layout.ejs&lt;/span>
+&lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
+&lt;/label>
+&lt;pre class="language-html" >&lt;code>
+[...línea 22]
+&amp;lt;header class=&amp;#34;main&amp;#34; id=&amp;#34;mainHeader&amp;#34;&amp;gt;
+&amp;lt;div class=&amp;#34;right&amp;#34;&amp;gt;
+&amp;lt;% if (!locals.loginUser) { %&amp;gt;
+&amp;lt;a href=&amp;#34;/login&amp;#34;&amp;gt;Login&amp;lt;/a&amp;gt;
+&amp;lt;% } else { %&amp;gt;
+&amp;lt;a href=&amp;#34;/users/&amp;lt;%= loginUser.id %&amp;gt;&amp;#34;&amp;gt;&amp;lt;%= loginUser.displayName %&amp;gt;&amp;lt;/a&amp;gt;
+&amp;lt;a href=&amp;#34;/login?_method=DELETE&amp;#34;&amp;gt;Logout&amp;lt;/a&amp;gt;
+&amp;lt;% } %&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;h1&amp;gt;&amp;lt;span class=&amp;#34;no-narrow&amp;#34;&amp;gt;The&amp;lt;/span&amp;gt; Quiz &amp;lt;span class=&amp;#34;no-narrow&amp;#34;&amp;gt;Site&amp;lt;/span&amp;gt;&amp;lt;/h1&amp;gt;
+&amp;lt;!-- aquí insertamos la imagen que nos piden --&amp;gt;
+&amp;lt;img src=&amp;#34;http//example.com/headerlogo.png&amp;#34; /&amp;gt;
+&amp;lt;/header&amp;gt;
+[...]
+&lt;/code>&lt;/pre>
+&lt;/div></content></item></channel></rss>

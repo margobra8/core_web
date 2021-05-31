@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>aspecto on CORE Study Hub</title><link>/tags/aspecto/</link><description>Recent content in aspecto on CORE Study Hub</description><generator>Hugo -- gohugo.io</generator><language>es</language><copyright>Marcos Gómez</copyright><lastBuildDate>Mon, 31 May 2021 18:04:17 +0200</lastBuildDate><atom:link href="/tags/aspecto/index.xml" rel="self" type="application/rss+xml"/><item><title>Cambiar el aspecto</title><link>/posts/cambiar-el-aspecto/</link><pubDate>Mon, 31 May 2021 18:04:17 +0200</pubDate><guid>/posts/cambiar-el-aspecto/</guid><description>Aspecto visual En el examen nos pueden pedir que cambiemos el aspecto de la interfaz del proyecto. Por lo general modificaremos el aspecto empleando CSS mediante la modificación de los archivos public/stylesheets/*.css que vienen en el proyecto.
+Un ejemplo sería cambiar la fuente de la interfaz eso lo podemos hacer modificando el siguiente archivo:
+css public/stylesheets/layout.css body { font: &amp;#34;Open Sans&amp;#34;; } Otro ejemplo lo tenemos si queremos cambiar el típico fondo amarillo que hay en los cuadros de respuestas por otro color.</description><content>&lt;h2 id="aspecto-visual">Aspecto visual&lt;/h2>
+&lt;p>En el examen nos pueden pedir que cambiemos el aspecto de la interfaz del proyecto. Por lo general modificaremos el aspecto empleando CSS mediante la modificación de los archivos &lt;code>public/stylesheets/*.css&lt;/code> que vienen en el proyecto.&lt;/p>
+&lt;p>Un ejemplo sería cambiar la fuente de la interfaz eso lo podemos hacer modificando el siguiente archivo:&lt;/p>
+&lt;div class="collapsable-code">
+&lt;input id="1" type="checkbox" />
+&lt;label for="1">
+&lt;span class="collapsable-code__language">css&lt;/span>
+&lt;span class="collapsable-code__title">public/stylesheets/layout.css&lt;/span>
+&lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
+&lt;/label>
+&lt;pre class="language-css" >&lt;code>
+body {
+font: &amp;#34;Open Sans&amp;#34;;
+}
+&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;p>Otro ejemplo lo tenemos si queremos cambiar el típico fondo amarillo que hay en los cuadros de respuestas por otro color. Para cambiarlo a verde podemos, por ejemplo, hacer lo siguiente:&lt;/p>
+&lt;div class="collapsable-code">
+&lt;input id="1" type="checkbox" />
+&lt;label for="1">
+&lt;span class="collapsable-code__language">css&lt;/span>
+&lt;span class="collapsable-code__title">public/stylesheets/layout.css&lt;/span>
+&lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
+&lt;/label>
+&lt;pre class="language-css" >&lt;code>
+input[type=text]:focus, input[type=password]:focus {
+background-color: green;
+height: 24px;
+}
+&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;p>Por último a continuación se muestra si queremos poner el color del texto de la página web de diferente color (ej. morado):&lt;/p>
+&lt;div class="collapsable-code">
+&lt;input id="1" type="checkbox" />
+&lt;label for="1">
+&lt;span class="collapsable-code__language">css&lt;/span>
+&lt;span class="collapsable-code__title">public/stylesheets/layout.css&lt;/span>
+&lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
+&lt;/label>
+&lt;pre class="language-css" >&lt;code>
+body {
+color: purple;
+}
+&lt;/code>&lt;/pre>
+&lt;/div>
+&lt;h2 id="adición-de-imagen-en-la-cabecera">Adición de imagen en la cabecera&lt;/h2>
+&lt;p>Nos pueden pedir añadir una imagen en la cabecera de la página web donde ahora mismo se muestra el texto &amp;ldquo;The Quiz Site&amp;rdquo;.&lt;/p>
+&lt;img src="/img/header.png" alt="header" class="center" />
+&lt;p>Para eso tenemos que editar el HTML que ahora mismo se renderiza como vistas a través de el motor de renderizado EJS. Para editar el marcado HTML de la página web, lo debemos hacer en &lt;code>views/*&lt;/code>. En este caso como queremos editar el documento base (layout) editaremos &lt;code>views/layout.ejs&lt;/code>.&lt;/p>
+&lt;div class="collapsable-code">
+&lt;input id="1" type="checkbox" />
+&lt;label for="1">
+&lt;span class="collapsable-code__language">html&lt;/span>
+&lt;span class="collapsable-code__title">views/layout.ejs&lt;/span>
+&lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
+&lt;/label>
+&lt;pre class="language-html" >&lt;code>
+[...línea 22]
+&amp;lt;header class=&amp;#34;main&amp;#34; id=&amp;#34;mainHeader&amp;#34;&amp;gt;
+&amp;lt;div class=&amp;#34;right&amp;#34;&amp;gt;
+&amp;lt;% if (!locals.loginUser) { %&amp;gt;
+&amp;lt;a href=&amp;#34;/login&amp;#34;&amp;gt;Login&amp;lt;/a&amp;gt;
+&amp;lt;% } else { %&amp;gt;
+&amp;lt;a href=&amp;#34;/users/&amp;lt;%= loginUser.id %&amp;gt;&amp;#34;&amp;gt;&amp;lt;%= loginUser.displayName %&amp;gt;&amp;lt;/a&amp;gt;
+&amp;lt;a href=&amp;#34;/login?_method=DELETE&amp;#34;&amp;gt;Logout&amp;lt;/a&amp;gt;
+&amp;lt;% } %&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;h1&amp;gt;&amp;lt;span class=&amp;#34;no-narrow&amp;#34;&amp;gt;The&amp;lt;/span&amp;gt; Quiz &amp;lt;span class=&amp;#34;no-narrow&amp;#34;&amp;gt;Site&amp;lt;/span&amp;gt;&amp;lt;/h1&amp;gt;
+&amp;lt;!-- aquí insertamos la imagen que nos piden --&amp;gt;
+&amp;lt;img src=&amp;#34;http//example.com/headerlogo.png&amp;#34; /&amp;gt;
+&amp;lt;/header&amp;gt;
+[...]
+&lt;/code>&lt;/pre>
+&lt;/div></content></item></channel></rss>

@@ -1,0 +1,47 @@
+<!doctype html><html lang=es><head><title>Cambiar el aspecto :: CORE Study Hub</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="En este post se detalla como cambiar el aspecto del proyecto Quiz"><meta name=keywords content=","><meta name=robots content="noodp"><link rel=canonical href=/posts/cambiar-el-aspecto/><link rel=stylesheet href=/assets/style.css><link rel=stylesheet href=/assets/green.css><link rel=apple-touch-icon href=/img/apple-touch-icon-192x192.png><link rel="shortcut icon" href=/img/favicon/green.png><meta name=twitter:card content="summary"><meta name=twitter:site content="https://core.marquitos.space/"><meta name=twitter:creator content="usualmarcos"><meta property="og:locale" content="es"><meta property="og:type" content="article"><meta property="og:title" content="Cambiar el aspecto"><meta property="og:description" content="En este post se detalla como cambiar el aspecto del proyecto Quiz"><meta property="og:url" content="/posts/cambiar-el-aspecto/"><meta property="og:site_name" content="CORE Study Hub"><meta property="og:image" content="/"><meta property="og:image:width" content="2048"><meta property="og:image:height" content="1024"><meta property="article:published_time" content="2021-05-31 18:04:17 +0200 +0200"></head><body class=green><div class="container headings--one-size"><header class=header><div class=header__inner><div class=header__logo><a href=/><div class=logo>CORE Study Hub</div></a></div><div class=menu-trigger>menu</div></div><nav class=menu><ul class="menu__inner menu__inner--desktop"><li><a href=/showcase>Showcase</a></li><li><a href=/about>Sobre mí</a></li></ul><ul class="menu__inner menu__inner--mobile"><li><a href=/showcase>Showcase</a></li><li><a href=/about>Sobre mí</a></li></ul></nav></header><div class=content><div class=post><h1 class=post-title><a href=/posts/cambiar-el-aspecto/>Cambiar el aspecto</a></h1><div class=post-meta><span class=post-date>2021-05-31</span>
+<span class=post-author>:: Marcos Gómez</span></div><span class=post-tags>#<a href=/tags/css/>css</a>&nbsp;
+#<a href=/tags/aspecto/>aspecto</a>&nbsp;
+#<a href=/tags/html/>html</a>&nbsp;
+#<a href=/tags/img/>img</a>&nbsp;</span><div class=post-content><div><h2 id=aspecto-visual>Aspecto visual<a href=#aspecto-visual class=hanchor arialabel=Anchor>&#8983;</a></h2><p>En el examen nos pueden pedir que cambiemos el aspecto de la interfaz del proyecto. Por lo general modificaremos el aspecto empleando CSS mediante la modificación de los archivos <code>public/stylesheets/*.css</code> que vienen en el proyecto.</p><p>Un ejemplo sería cambiar la fuente de la interfaz eso lo podemos hacer modificando el siguiente archivo:</p><div class=collapsable-code><input id=1 type=checkbox>
+<label for=1><span class=collapsable-code__language>css</span>
+<span class=collapsable-code__title>public/stylesheets/layout.css</span>
+<span class=collapsable-code__toggle data-label-expand=Show data-label-collapse=Hide></span></label><pre class=language-css><code>
+body {
+  font: &#34;Open Sans&#34;;
+}
+</code></pre></div><p>Otro ejemplo lo tenemos si queremos cambiar el típico fondo amarillo que hay en los cuadros de respuestas por otro color. Para cambiarlo a verde podemos, por ejemplo, hacer lo siguiente:</p><div class=collapsable-code><input id=1 type=checkbox>
+<label for=1><span class=collapsable-code__language>css</span>
+<span class=collapsable-code__title>public/stylesheets/layout.css</span>
+<span class=collapsable-code__toggle data-label-expand=Show data-label-collapse=Hide></span></label><pre class=language-css><code>
+input[type=text]:focus, input[type=password]:focus {
+  background-color: green;
+  height: 24px;
+}
+</code></pre></div><p>Por último a continuación se muestra si queremos poner el color del texto de la página web de diferente color (ej. morado):</p><div class=collapsable-code><input id=1 type=checkbox>
+<label for=1><span class=collapsable-code__language>css</span>
+<span class=collapsable-code__title>public/stylesheets/layout.css</span>
+<span class=collapsable-code__toggle data-label-expand=Show data-label-collapse=Hide></span></label><pre class=language-css><code>
+body {
+  color: purple;
+}
+</code></pre></div><h2 id=adición-de-imagen-en-la-cabecera>Adición de imagen en la cabecera<a href=#adición-de-imagen-en-la-cabecera class=hanchor arialabel=Anchor>&#8983;</a></h2><p>Nos pueden pedir añadir una imagen en la cabecera de la página web donde ahora mismo se muestra el texto &ldquo;The Quiz Site&rdquo;.</p><img src=/img/header.png alt=header class=center><p>Para eso tenemos que editar el HTML que ahora mismo se renderiza como vistas a través de el motor de renderizado EJS. Para editar el marcado HTML de la página web, lo debemos hacer en <code>views/*</code>. En este caso como queremos editar el documento base (layout) editaremos <code>views/layout.ejs</code>.</p><div class=collapsable-code><input id=1 type=checkbox>
+<label for=1><span class=collapsable-code__language>html</span>
+<span class=collapsable-code__title>views/layout.ejs</span>
+<span class=collapsable-code__toggle data-label-expand=Show data-label-collapse=Hide></span></label><pre class=language-html><code>
+[...línea 22]
+&lt;header class=&#34;main&#34; id=&#34;mainHeader&#34;&gt;
+
+    &lt;div class=&#34;right&#34;&gt;
+        &lt;% if (!locals.loginUser) { %&gt;
+            &lt;a href=&#34;/login&#34;&gt;Login&lt;/a&gt;
+        &lt;% } else { %&gt;
+            &lt;a href=&#34;/users/&lt;%= loginUser.id %&gt;&#34;&gt;&lt;%= loginUser.displayName %&gt;&lt;/a&gt;
+            &lt;a href=&#34;/login?_method=DELETE&#34;&gt;Logout&lt;/a&gt;
+        &lt;% } %&gt;
+    &lt;/div&gt;
+    &lt;h1&gt;&lt;span class=&#34;no-narrow&#34;&gt;The&lt;/span&gt; Quiz &lt;span class=&#34;no-narrow&#34;&gt;Site&lt;/span&gt;&lt;/h1&gt;
+    &lt;!-- aquí insertamos la imagen que nos piden --&gt;
+    &lt;img src=&#34;http//example.com/headerlogo.png&#34; /&gt;
+&lt;/header&gt;
+[...]
+</code></pre></div></div></div></div></div><footer class=footer><div class=footer__inner><div class="copyright copyright--user"><span>© 2021 Marcos Gómez</span></div></div></footer><script src=/assets/main.js></script><script src=/assets/prism.js></script></div></body></html>
