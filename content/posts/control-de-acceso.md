@@ -15,7 +15,7 @@ Iremos paso a paso viendo que modificaciones se tienen que hacer en cada caso. T
 
 ## Acceso a cada página permitido sólo un número X de veces
 
-Este problema lo podemos resolver de varias maneras dependiendo de lo que queramos conseguir. Si queremos que el número de accesos realizados se resetee al volver a entrar a la página, haremos el control de acceso a través de `session`. Si queremos que el cambio sea persistente y para todos los usuarios, modificaremos los modelos.
+Este problema lo podemos resolver de varias maneras dependiendo de lo que queramos conseguir. Si queremos que el número de accesos realizados se resetee al volver a entrar a la página, haremos el control de acceso a través de `session`. Si queremos que el cambio sea persistente y para todos los usuarios, modificaremos los modelos o usaremos una variable global.
 
 ### Control no persistente (mediante `session`)
 
@@ -79,4 +79,37 @@ exports.visitLimitGeneral = (req, res, next) => {
 }
 {{</code>}}
 
-In progres...
+Añadiríamos este middleware a todas las rutas que lo necesiten como en el apartado anterior.
+
+### Contador persistente
+
+Para que la cuenta se mantenga durante sesiones es necesario que se almacene de manera persistente. La manera idónea sería crear un modelo `Page` que tuviese los campos de `url` y `visits`, creáramos todas las páginas actuales con un seeder y las migraciones correspondientes. Sin embargo, esto es muy tedioso y largo. Optaremos por otro método similar al anterior pero empleando una variable global nutriéndonos del objeto `global` que proporciona node.
+
+En este caso sólo implementaré la situación de cuentas distintas por página porque es el caso más particular, se deja la implementación del caso del cotador general persistente para el lector.
+
+{{< code language="js" title="controllers/session.js" expand="Show" collapse="Hide" isCollapsed="false" >}}
+exports.visitLimitPerPageGlobal = (req, res, next) => {
+    // establecemos el límite de visitas para cada página
+    const VISIT_LIMIT = 10;
+
+    // almacenamos en una variable la ruta a la que accede el usuario
+    const url = req.url;
+
+    // creamos el objeto global.visits donde almacenaremos un objeto con las visitas a cada página o cogemos el objeto ya presente
+    global.visits = global.visits || {};
+
+    // almacenamos un nuevo valor de visita para cada ruta o creamos la primera visita a esa página
+    global.visits[url] = global.visits[url] || 0;
+    global.visits[url]++;
+
+    // comprobamos que no se excede el número de visitas permitidas para esa página, en ese caso continuamos al siguiente mw, si no, mostramos mensaje y volvemos al home
+    if (global.visits[url] <= VISIT_LIMIT) {
+        next();
+    } else {
+        req.flash("error", "You have depleted the amount of visits permitted to " + url);
+        res.redirect("/");
+    }
+}
+{{</code>}}
+
+In progress...
