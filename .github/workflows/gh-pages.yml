@@ -30,3 +30,9 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
+      
+      - name: Add CNAME
+        uses: "finnp/create-file-action@master"
+        env:
+          FILE_NAME: "CNAME"
+          FILE_DATA: "core.marquitos.space"
