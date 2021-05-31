@@ -38,6 +38,7 @@ exports.visitLimitPerPage = (req, res, next) => {
 
     // almacenamos un nuevo valor de visita para cada ruta o creamos la primera visita a esa página
     req.session.visits[url] = req.session.visits[url] || 1;
+    req.session.visits[url]++;
 
     // comprobamos que no se excede el número de visitas permitidas para esa página, en ese caso continuamos al siguiente mw, si no, mostramos mensaje y volvemos al home
     if (req.session.visits[url] <= VISIT_LIMIT) {
@@ -66,6 +67,7 @@ exports.visitLimitGeneral = (req, res, next) => {
 
     // creamos el objeto req.session.visits donde almacenaremos un objeto con las visitas totales o cogemos el objeto ya presente
     req.session.visits = req.session.visits || 1;
+    req.session.visits++;
 
     // comprobamos que no se excede el número de visitas permitidas para esa página, en ese caso continuamos al siguiente mw, si no, mostramos mensaje y volvemos al home
     if (req.session.visits <= VISIT_LIMIT) {
