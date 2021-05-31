@@ -11,7 +11,7 @@ showFullContent = false
 
 En el examen nos pueden pedir restringir el acceso a ciertas páginas, pudiendo éstas ser visualizadas un número determinado de veces o sólo por algunos usuarios durante ciertas horas del día.
 
-Iremos paso a paso viendo que modificaciones se tienen que hacer en cada caso. Todos estos controles se implementan como middlewares en el controlador `controllers/session.js`
+Iremos paso a paso viendo que modificaciones se tienen que hacer en cada caso. Todos estos controles se implementan como middlewares en el controlador `controllers/session.js`.
 
 ## Acceso a cada página permitido sólo un número X de veces
 
