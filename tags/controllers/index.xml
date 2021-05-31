@@ -6,8 +6,8 @@ Implementación de la ruta Para implementar esta funcionalidad vamos a hacer que
 &lt;p>Para implementar esta funcionalidad vamos a hacer que el usuario pueda visualizar la puntuación de los grupos en una nueva página. Para ello implementaremos una primitiva HTTP &lt;code>GET /scores/&lt;/code> en la que se visualizará una tabla con todas las puntuaciones de todos los grupos. Para gestionar el tema de las puntuaciones crearemos un controlador que se encarge de gestionar todas las primitivas relacionadas con las puntuaciones.&lt;/p>
 &lt;p>De momento supondremos que este controller lo llamaremos &lt;code>scoreController&lt;/code>. Vamos a editar el documento de rutas para incluir la nueva ruta.&lt;/p>
 &lt;div class="collapsable-code">
-&lt;input id="943861527" type="checkbox" />
-&lt;label for="943861527">
+&lt;input id="196534278" type="checkbox" />
+&lt;label for="196534278">
 &lt;span class="collapsable-code__language">js&lt;/span>
 &lt;span class="collapsable-code__title">routes/index.js&lt;/span>
 &lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
@@ -30,8 +30,8 @@ router.get(&amp;#34;/scores&amp;#34;, scoreController.index);
 &lt;h1 id="modificación-del-modelo">Modificación del modelo&lt;/h1>
 &lt;p>Para acomodar las puntuaciones por grupo tenemos que modificar el modelo de &lt;code>Group&lt;/code> añadiendo un campo de puntuación, eso lo haremos en el archivo del modelo correspondiente:&lt;/p>
 &lt;div class="collapsable-code">
-&lt;input id="671249385" type="checkbox" />
-&lt;label for="671249385">
+&lt;input id="642935718" type="checkbox" />
+&lt;label for="642935718">
 &lt;span class="collapsable-code__language">js&lt;/span>
 &lt;span class="collapsable-code__title">models/group.js&lt;/span>
 &lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
@@ -66,8 +66,8 @@ return Group;
 &lt;h2 id="creación-del-controllador">Creación del controllador&lt;/h2>
 &lt;p>Crearemos un nuevo archivo &lt;code>controllers/score.js&lt;/code> para este fin e implementaremos el método index.&lt;/p>
 &lt;div class="collapsable-code">
-&lt;input id="978365214" type="checkbox" />
-&lt;label for="978365214">
+&lt;input id="643198527" type="checkbox" />
+&lt;label for="643198527">
 &lt;span class="collapsable-code__language">js&lt;/span>
 &lt;span class="collapsable-code__title">controllers/score.js&lt;/span>
 &lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
@@ -94,8 +94,8 @@ next(error);
 &lt;h2 id="implementación-de-la-vista">Implementación de la vista&lt;/h2>
 &lt;p>Crearemos una nueva vista para ello: &lt;code>views/scores/index.ejs&lt;/code> basándonos en el intex de la vista de groups ya hecha.&lt;/p>
 &lt;div class="collapsable-code">
-&lt;input id="148763592" type="checkbox" />
-&lt;label for="148763592">
+&lt;input id="983475216" type="checkbox" />
+&lt;label for="983475216">
 &lt;span class="collapsable-code__language">html&lt;/span>
 &lt;span class="collapsable-code__title">views/scores/index.ejs&lt;/span>
 &lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
@@ -119,8 +119,8 @@ next(error);
 &lt;h2 id="modificación-de-groupcheck">Modificación de &lt;code>groupCheck&lt;/code>&lt;/h2>
 &lt;p>Para ir sumando las puntuaciones, modificaremos el controlador de groupCheck. En mi caso lo he llamado randomCheck pero es distinto al de los quizzes individuales porque está en el archivo &lt;code>controllers/group.js&lt;/code>.&lt;/p>
 &lt;div class="collapsable-code">
-&lt;input id="691475382" type="checkbox" />
-&lt;label for="691475382">
+&lt;input id="372459861" type="checkbox" />
+&lt;label for="372459861">
 &lt;span class="collapsable-code__language">js&lt;/span>
 &lt;span class="collapsable-code__title">controllers/group.js&lt;/span>
 &lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
@@ -180,8 +180,8 @@ next(error);
 &lt;h2 id="adición-del-enlace">Adición del enlace&lt;/h2>
 &lt;p>Ahora sólo nos falta añadir el enlace en el menú de navegación.&lt;/p>
 &lt;div class="collapsable-code">
-&lt;input id="624157938" type="checkbox" />
-&lt;label for="624157938">
+&lt;input id="592734861" type="checkbox" />
+&lt;label for="592734861">
 &lt;span class="collapsable-code__language">html&lt;/span>
 &lt;span class="collapsable-code__title">views/scores/index.ejs&lt;/span>
 &lt;span class="collapsable-code__toggle" data-label-expand="Show" data-label-collapse="Hide">&lt;/span>
