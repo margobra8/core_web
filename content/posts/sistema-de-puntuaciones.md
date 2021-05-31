@@ -158,6 +158,7 @@ exports.randomCheck = async (req, res, next) => {
       const score = req.session.groupsRandomPlay[curGroup.id].resolved.length;
 
       // actualizamos el score del group en cuestión
+      curGroup.score = score;
       curGroup = await curGroup.save({fields: ["score"]});
 
       res.render("groups/random_result", {
