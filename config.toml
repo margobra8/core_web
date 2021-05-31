@@ -69,4 +69,8 @@ paginate = 5
         identifier = "about"
         name = "Sobre mí"
         url = "https://me.marquitos.space/"
+      [[languages.es.menu.main]]
+        identifier = "practica"
+        name = "Mi Entrega9_groups"
+        url = "https://github.com/margobra8/quiz_2020"
 
