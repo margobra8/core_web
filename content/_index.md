@@ -9,4 +9,4 @@ Aquí encontrarás varios posts sobre los diferentes temas que pueden entrar en 
 
 Espero que sea de ayuda! Bajando puedes encontrar más posts.
 
-:)
+Un saludo :)
